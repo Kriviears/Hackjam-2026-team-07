@@ -34,7 +34,7 @@ app.use('/api/roadmap', roadmapRouter);       // Handles registration, merge eng
 // 4. GLOBAL ERROR HANDLER 
 app.use((err, req, res, next) => {
   console.error("Global Server Error Triggered :", err.stack);
-  res.status(505).json({ error: "Something broken under the hood! Check backend console." });
+  res.status(500).json({ error: "Something broken under the hood! Check backend console." });
 });
 
 // 5. SERVER LAUNCH 
