@@ -3,6 +3,7 @@ const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { Mistral } = require('@mistralai/mistralai');
 const { getTrackMetadata } = require('../utils/trackMetadata');
+const { loadSystemPrompt } = require('../utils/loadSystemPrompt');
 
 const onboardingLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1-minute window
@@ -35,25 +36,7 @@ router.post('/', onboardingLimiter, async (req, res) => {
     }
 
     // 3. SYSTEM PROMPT: Guides the LLM to strictly classify the user and output clean JSON
-    const systemPrompt = `
-You are an AI Career Coach for Per Scholas. The user is a complete beginner. You must analyze their answer to the situational question and match them with EXACTLY ONE of these 5 platform courses:
-
-1. Cloud Support Associate (If they enjoy fast-paced environments, server setups, and helping clients fix live systems).
-2. Cybersecurity Analyst (If they mention safety, catching hackers, fixing vulnerabilities, or auditing systems for risks).
-3. Data Engineer (If they prefer working quietly with large databases, structured folders, spreadsheets, or long backend puzzles).
-4. Software Engineer (If they explicitly talk about building creative tools, coding apps, making websites, or designing user features).
-5. Systems Support Specialist (If they like hardware, setting up physical computers/routers, operating systems, and classic IT support).
- 
-Return your response STRICTLY as a JSON object with 6 fields. Do not wrap it in \`\`\`json markdown blocks:
-{
-  "track_id": "cloud/cybersecurity/data_engineering/software_engineering/systems_support",
-  "title": "Full Role Title",
-  "match_reason": "A personalized explanation referencing the user's own words on why this track is the best fit for them",
-  "soft_skills": ["Array of 3 specific soft skills they should focus on first based on their answer"],
-  "mentor_style_match": "Description of the ideal mentor personality type for this user (e.g., 'A practical mentor who focuses on hands-on code reviews' or 'An encouraging mentor with strong leadership experience')",
-  "growth_areas": ["Array of 2 areas where they might struggle initially and need support"]
-}
-    `;
+    const systemPrompt = loadSystemPrompt();
  //   Allowed values for track_id are exactly: "cloud" or "cybersecurity".
     // 4. MISTRAL API CALL: Requesting structured JSON chat completion
     const aiResponse = await mistral.chat.complete({
@@ -62,7 +45,9 @@ Return your response STRICTLY as a JSON object with 6 fields. Do not wrap it in 
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: `User Answer: "${userResponse}"` }
-      ]
+      ],
+      temperature: 0.7,
+      maxTokens: 300
     });
 
     // Parse Mistral AI output safely
