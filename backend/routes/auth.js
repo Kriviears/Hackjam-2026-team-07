@@ -8,13 +8,14 @@ const User = require('../models/User');
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, roadmapData } = req.body;
+    const trackTitle = roadmapData && (roadmapData.title || roadmapData.track_title);
 
     if (!name || !email || !password || !roadmapData) {
       return res.status(400).json({ error: "Name, email, password, and roadmapData are required." });
     }
 
-    if (!roadmapData.track_id || !roadmapData.title || !roadmapData.match_reason) {
-      return res.status(400).json({ error: "roadmapData must include track_id, title, and match_reason." });
+    if (!roadmapData.track_id || !trackTitle || !roadmapData.match_reason) {
+      return res.status(400).json({ error: "roadmapData must include track_id, title or track_title, and match_reason." });
     }
 
  
@@ -34,8 +35,13 @@ router.post('/register', async (req, res) => {
       persona: "aspiring_candidate",
       track: {
         track_id: roadmapData.track_id,
-        title: roadmapData.title,
-        match_reason: roadmapData.match_reason
+        title: trackTitle,
+      },
+      ai_profile: {
+        soft_skills: Array.isArray(roadmapData.soft_skills) ? roadmapData.soft_skills : [],
+        mentor_style_match: typeof roadmapData.mentor_style_match === 'string' ? roadmapData.mentor_style_match : "",
+        match_reason: roadmapData.match_reason,
+        growth_areas: Array.isArray(roadmapData.growth_areas) ? roadmapData.growth_areas : []
       },
       progress: {
         coursePercent: 0,
@@ -55,6 +61,7 @@ router.post('/register', async (req, res) => {
     return res.status(201).json({
       token,
       userId: newUser._id,
+      persona: newUser.persona,
       message: "Registration successful!"
     });
 
@@ -96,6 +103,7 @@ router.post('/login', async (req, res) => {
     return res.status(200).json({
       token,
       userId: user._id,
+      persona: user.persona,
       message: "Login successful!"
     });
 

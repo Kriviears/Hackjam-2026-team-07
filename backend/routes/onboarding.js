@@ -43,12 +43,16 @@ You are an AI Career Coach for Per Scholas. The user is a complete beginner. You
 3. Data Engineer (If they prefer working quietly with large databases, structured folders, spreadsheets, or long backend puzzles).
 4. Software Engineer (If they explicitly talk about building creative tools, coding apps, making websites, or designing user features).
 5. Systems Support Specialist (If they like hardware, setting up physical computers/routers, operating systems, and classic IT support).
-
  
- Return your response STRICTLY as a JSON object with 3 fields. Do not wrap it in \`\`\`json markdown blocks:
-track_id (cloud/cybersecurity/data_engineering/software_engineering/systems_support),
-title (Full Role Title),
-match_reason (A personalized explanation referencing the user's own words).
+Return your response STRICTLY as a JSON object with 6 fields. Do not wrap it in \`\`\`json markdown blocks:
+{
+  "track_id": "cloud/cybersecurity/data_engineering/software_engineering/systems_support",
+  "title": "Full Role Title",
+  "match_reason": "A personalized explanation referencing the user's own words on why this track is the best fit for them",
+  "soft_skills": ["Array of 3 specific soft skills they should focus on first based on their answer"],
+  "mentor_style_match": "Description of the ideal mentor personality type for this user (e.g., 'A practical mentor who focuses on hands-on code reviews' or 'An encouraging mentor with strong leadership experience')",
+  "growth_areas": ["Array of 2 areas where they might struggle initially and need support"]
+}
     `;
  //   Allowed values for track_id are exactly: "cloud" or "cybersecurity".
     // 4. MISTRAL API CALL: Requesting structured JSON chat completion
@@ -74,15 +78,18 @@ match_reason (A personalized explanation referencing the user's own words).
     }
 
     // Inject the AI personalized reason into the response track object
-    const trackData = {
-      track_id: trackConfig.track_id,
-      track_title: trackConfig.track_title,
-      avg_salary: trackConfig.avg_salary,
-      match_reason: aiData.match_reason
-    };
-    
+    const trackData =  {
+        track_id: trackConfig.track_id,
+        title: trackConfig.track_title,
+        track_title: trackConfig.track_title,
+        avg_salary: aiData.avg_salary,
+        match_reason: aiData.match_reason,
+        soft_skills: Array.isArray(aiData.soft_skills) ? aiData.soft_skills : [],
+        mentor_style_match: typeof aiData.mentor_style_match === 'string' ? aiData.mentor_style_match : "",
+        growth_areas: Array.isArray(aiData.growth_areas) ? aiData.growth_areas : []
+    };    
 
-    // Initialize all skills to 'isMastered: false' because this is a brand new anonymous Guest/Candidate
+   // Initialize all skills to 'isMastered: false' because this is a brand new anonymous Guest/Candidate
     const formatTierSkills = (courses) => {
       if (!courses) return [];
       return courses.map(course => ({
@@ -98,7 +105,7 @@ match_reason (A personalized explanation referencing the user's own words).
     const dynamicResponsePayload = {
       userId: "guest_session_" + Math.random().toString(36).substr(2, 9), // Temporary session ID
       persona: "aspiring_candidate",
-      track: trackData,
+      track: trackData, 
       timeline: {
         junior: {
           status: "active",
@@ -116,9 +123,6 @@ match_reason (A personalized explanation referencing the user's own words).
           courses: formatTierSkills(trackConfig.timeline.senior.courses)
         }
       },
-      mentors: [
-        { name: "Sample Mentor", role: `Senior ${trackConfig.track_title}`, track: selectedTrackId }
-      ]
     };
 
     

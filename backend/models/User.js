@@ -30,10 +30,6 @@ const UserSchema = new mongoose.Schema({
       type: String, 
       required: true 
     },
-    match_reason: { 
-      type: String, 
-      required: true 
-    }
   },
 
   progress: {
@@ -48,7 +44,25 @@ const UserSchema = new mongoose.Schema({
     }
   },
 
-  // 4. TIMESTAMPS
+  ai_profile: {
+    soft_skills: { 
+      type: [String], 
+      required: false, 
+    },
+    mentor_style_match: { 
+      type: String, 
+      required: false 
+    },
+    match_reason: { 
+      type: String, 
+      required: true 
+    },
+    growth_areas    : { 
+      type: [String], 
+      required: false, 
+    },
+  },
+  
   createdAt: { 
     type: Date, 
     default: Date.now 

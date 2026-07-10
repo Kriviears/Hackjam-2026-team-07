@@ -1,50 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const bcryptjs = require('bcryptjs');
 const User = require('../models/User');
 const requireAuth  = require('../middleware/requireAuth');
 const { getTrackMetadata } = require('../utils/trackMetadata');
-
-// @route   POST /api/roadmap/apply
-// @desc    Convert an anonymous guest into a permanent 'aspiring_candidate' user in MongoDB
-// @access  Public
-router.post('/apply', async (req, res) => {
-  try {
-    const { name, email, password, track_id, title, match_reason } = req.body;
-
-    // 1. Basic validation
-    if (!name || !email || !password || !track_id || !title || !match_reason) {
-      return res.status(400).json({ error: "All profile and tracking fields are required." });
-    }
-
-    // 2. Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: "An account with this email already exists." });
-    }
-
-    // 3. Hash password with bcryptjs
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
-
-    // 4. Save user to MongoDB with hashed password
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,  
-      persona: "aspiring_candidate",
-      track: { track_id, title, match_reason },
-      progress: { coursePercent: 0, completedSkills: [] }
-    });
-
-    await newUser.save();
-    return res.status(201).json({ success: true, message: "Application submitted and profile created!", userId: newUser._id });
-
-  } catch (error) {
-    console.error("Application/Registration Save Error:", error);
-    return res.status(500).json({ error: "Database error during registration save." });
-  }
-});
 
 // @route   GET /api/roadmap/:userId
 // @desc    Dynamic Merge Engine. Combines user's DB progress with static JSON metadata configs
@@ -66,8 +24,17 @@ router.get('/:userId', requireAuth, async (req, res) => {
       return res.status(500).json({ error: "Configuration template file missing for this track ID." });
     }
 
-    // Override the generic file match reason with the user's actual saved personalized AI text
-    trackConfig.match_reason = user.track.match_reason;
+    const completedSkills = user.progress && Array.isArray(user.progress.completedSkills)
+      ? user.progress.completedSkills
+      : [];
+    const coursePercent = user.progress && typeof user.progress.coursePercent === 'number'
+      ? user.progress.coursePercent
+      : 0;
+    const aiProfile = user.ai_profile || {};
+    const matchReason = aiProfile.match_reason || user.track.match_reason || trackConfig.match_reason || "";
+    const softSkills = Array.isArray(aiProfile.soft_skills) ? aiProfile.soft_skills : [];
+    const mentorStyleMatch = typeof aiProfile.mentor_style_match === 'string' ? aiProfile.mentor_style_match : "";
+    const growthAreas = Array.isArray(aiProfile.growth_areas) ? aiProfile.growth_areas : [];
 
     // 2. MERGE LOGIC FUNCTION: Maps string arrays from DB to active boolean flags for React UI checkboxes
     const mergeCourseSkills = (courses) => {
@@ -77,7 +44,7 @@ router.get('/:userId', requireAuth, async (req, res) => {
         skills: course.skills.map(skillName => ({
           name: skillName,
           // True if user has manually completed it and saved it in their MongoDB progress score array
-          isMastered: user.progress.completedSkills.includes(skillName)
+          isMastered: completedSkills.includes(skillName)
         }))
       }));
     };
@@ -91,7 +58,7 @@ router.get('/:userId', requireAuth, async (req, res) => {
       junior: {
         status: juniorStatus,
         label: trackConfig.timeline.junior.label,
-        progress_percent: user.progress.coursePercent, // Feeds React progress bar slider component
+        progress_percent: coursePercent, // Feeds React progress bar slider component
         courses: mergeCourseSkills(trackConfig.timeline.junior.courses)
       },
       middle: {
@@ -109,9 +76,13 @@ router.get('/:userId', requireAuth, async (req, res) => {
     // 4. Return combined dataset
     const trackInfo = {
       track_id: trackConfig.track_id,
+      title: user.track.title || trackConfig.track_title,
       track_title: trackConfig.track_title,
       avg_salary: trackConfig.avg_salary,
-      match_reason: trackConfig.match_reason
+      match_reason: matchReason,
+      soft_skills: softSkills,
+      mentor_style_match: mentorStyleMatch,
+      growth_areas: growthAreas
     };
 
     return res.status(200).json({
