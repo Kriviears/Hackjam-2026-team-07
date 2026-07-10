@@ -21,32 +21,32 @@ export const mockRoadmap = {
             junior: {
                 status: "active",
                 course: "AWS re/Start Training Program",
-                progress_precent: 46,
+                progress_percent: 46,
                 //Each skill tracks whether tge user has already mastered it Powers the chackmark vs, circle icon in CourseCard
                 skills: [
-                    { name: "Linux CLI & basic bash Scripts", isMAstered: true },
-                    { name: "Basic Networking (DNS, TCP/IP)", isMAstered: true },
-                    {name: "Core AWS Services (EC2, S3, IAM)", isMAstered: false },
-                    {name: "Helpdesk Ticket Management", isMAstered: false },
+                    { name: "Linux CLI & basic bash Scripts", isMastered: true },
+                    { name: "Basic Networking (DNS, TCP/IP)", isMastered: true },
+                    {name: "Core AWS Services (EC2, S3, IAM)", isMastered: false },
+                    {name: "Helpdesk Ticket Management", isMastered: false },
                 ]
 
         },
         middle: {
             status: "locked",
             course: "Advanced Azure & DevOps Upskilling",
-            Skills: [
-                {name: "Multi_Cloud (Microsoft Azure", isMAstered: false },
-                {name: "Containers basics (Docker)", isMAstered: false },
-                {name: " Infrastructure as Code (Terraform)", isMAstered: false },
+            skills: [
+                {name: "Multi_Cloud (Microsoft Azure", isMastered: false },
+                {name: "Containers basics (Docker)", isMastered: false },
+                {name: " Infrastructure as Code (Terraform)", isMastered: false },
             ]
         },
         senior: {
             status: "locked",
             course: "Enterprise Cloud Architect ",
-            Skills: [
-                {name: "Container Orchestration (Kubernetes)", isMAstered: false },
-                {name: "FinOps (Cost Optimixation)", isMAstered: false },
-            
+            skills: [
+                {name: "Container Orchestration (Kubernetes)", isMastered: false },
+                {name: "FinOps (Cost Optimixation)", isMastered: false },
+
             ]
     }
 },
