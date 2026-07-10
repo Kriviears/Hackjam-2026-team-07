@@ -3,6 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+if (!process.env.JWT_SECRET) {
+  console.error('FATAL: JWT_SECRET is not set in environment variables.');
+  process.exit(1);
+}
+
 const app = express();
 
 // 1. MIDDLEWARES  
@@ -15,7 +20,7 @@ mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB Connected successfully ✓'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// 3. ROUTE DECLARATIONS (Подключение наших изолированных роутов)
+// 3. ROUTE DECLARATIONS  
 // This links the specific routing files we coded earlier
 const authRouter = require('./routes/auth');
 const onboardingRouter = require('./routes/onboarding');

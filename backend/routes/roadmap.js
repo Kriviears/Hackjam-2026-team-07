@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const bcryptjs = require('bcryptjs');
 const User = require('../models/User');
+const requireAuth  = require('../middleware/requireAuth');
 
 // Helper function to safely read track templates from the filesystem
 const getTrackMetadata = (trackId) => {
@@ -62,9 +63,13 @@ router.post('/apply', async (req, res) => {
 
 // @route   GET /api/roadmap/:userId
 // @desc    Dynamic Merge Engine. Combines user's DB progress with static JSON metadata configs
-// @access  Private / Public Demo
-router.get('/:userId', async (req, res) => {
+// @access  Private (caller must be the owner of :userId)
+router.get('/:userId', requireAuth, async (req, res) => {
   try {
+    if (req.params.userId !== req.userId) {
+      return res.status(403).json({ error: "You are not allowed to view this user's roadmap." });
+    }
+
     const user = await User.findById(req.params.userId);
     if (!user) {
       return res.status(404).json({ error: "User profile not found in database." });
@@ -143,15 +148,15 @@ router.get('/:userId', async (req, res) => {
 // @route   PATCH /api/roadmap/toggle-skill
 // @desc    Progress Scoring Controller. Toggles individual skill string strings inside user's MongoDB array
 // @access  Private
-router.patch('/toggle-skill', async (req, res) => {
+router.patch('/toggle-skill', requireAuth, async (req, res) => {
   try {
-    const { userId, skillName } = req.body;
+    const { skillName } = req.body;
 
-    if (!userId || !skillName) {
-      return res.status(400).json({ error: "userId and skillName are required to register progress score changes." });
+    if (!skillName) {
+      return res.status(400).json({ error: "skillName is required to register progress score changes." });
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
