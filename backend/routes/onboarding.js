@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const rateLimit = require('express-rate-limit');
-const { Mistral } = require('@mistralai/mistralai'); 
+const { Mistral } = require('@mistralai/mistralai');
+const { getTrackMetadata } = require('../utils/trackMetadata');
 
 const onboardingLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1-minute window
@@ -14,19 +13,6 @@ const onboardingLimiter = rateLimit({
 });
 
 const mistral = new Mistral({ apiKey: process.env.MISTRAL_API_KEY });
-
-const getTrackMetadata = (trackId) => {
-  try {
-    const filePath = path.join(__dirname, '..', 'metadata', `${trackId}.json`);
-    const rawData = fs.readFileSync(filePath, 'utf-8');
-    const parsedData = JSON.parse(rawData);
-    // Return the nested track object (e.g., parsedData.cloud)
-    return parsedData[trackId];
-  } catch (error) {
-    console.error(`Error reading metadata file for track: ${trackId}`, error);
-    return null;
-  }
-};
 
 // @route   POST /api/onboarding
 // @desc    Process candidate's soft skills text via Mistral AI & return merged roadmap on-the-fly

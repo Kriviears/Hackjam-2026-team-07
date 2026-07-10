@@ -1,24 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const bcryptjs = require('bcryptjs');
 const User = require('../models/User');
 const requireAuth  = require('../middleware/requireAuth');
-
-// Helper function to safely read track templates from the filesystem
-const getTrackMetadata = (trackId) => {
-  try {
-    const filePath = path.join(__dirname, '..', 'metadata', `${trackId}.json`);
-    const rawData = fs.readFileSync(filePath, 'utf-8');
-    const parsedData = JSON.parse(rawData);
-    // Return the nested track object (e.g., parsedData.cloud)
-    return parsedData[trackId];
-  } catch (error) {
-    console.error(`File system read error for track config [${trackId}]:`, error);
-    return null;
-  }
-};
+const { getTrackMetadata } = require('../utils/trackMetadata');
 
 // @route   POST /api/roadmap/apply
 // @desc    Convert an anonymous guest into a permanent 'aspiring_candidate' user in MongoDB
