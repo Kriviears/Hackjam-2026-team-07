@@ -59,19 +59,25 @@
           }
         ]
       },
-    "senior": {
+      "senior": {
         "status": "locked",
         "label": "Step 3: Senior Expert Level (Long-Term Trajectory)",
-        "target_roles": [
-          "Chief Information Security Officer (CISO)",
-          "Lead Security Architect",
-          "Director of IT Infrastructure"
-        ],
-        "skills": [
-          "Enterprise Risk Management & Corporate CISO Strategy",
-          "Compliance & Regulations (GDPR, HIPAA, SOC2, ISO27001)",
-          "Incident Crisis Management & Disaster Recovery Leadership",
-          "Security Budgeting, Vendor Management & Tech Team Leadership"
+        "courses": [
+          {
+            "course_id": "enterprise_security_leadership",
+            "course_name": "Enterprise Security Leadership & Risk Management",
+            "skills": [
+              "Enterprise Risk Management & Corporate CISO Strategy",
+              "Compliance & Regulations (GDPR, HIPAA, SOC2, ISO27001)",
+              "Incident Crisis Management & Disaster Recovery Leadership",
+              "Security Budgeting, Vendor Management & Tech Team Leadership"
+            ],
+            "target_roles": [
+              "Chief Information Security Officer (CISO)",
+              "Lead Security Architect",
+              "Director of IT Infrastructure"
+            ]
+          }
         ]
       }
     }

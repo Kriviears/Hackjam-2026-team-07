@@ -48,16 +48,22 @@
       "senior": {
         "status": "locked",
         "label": "Step 3: Senior Expert Level (On-the-job Growth)",
-        "target_roles": [
-          "Senior Cloud Architect",
-          "Senior DevOps Engineer",
-          "Infrastructure Operations Manager"
-        ],
-        "skills": [
-          "Enterprise Container Orchestration (Kubernetes / EKS)",
-          "End-to-End CI/CD Automation Pipelines (GitHub Actions, GitLab)",
-          "Application Performance Monitoring & Alerting (Grafana, Prometheus)",
-          "FinOps & Cloud Cost Optimization Engineering"
+        "courses": [
+          {
+            "course_id": "enterprise_cloud_architecture",
+            "course_name": "Enterprise Cloud Architecture",
+            "skills": [
+              "Enterprise Container Orchestration (Kubernetes / EKS)",
+              "End-to-End CI/CD Automation Pipelines (GitHub Actions, GitLab)",
+              "Application Performance Monitoring & Alerting (Grafana, Prometheus)",
+              "FinOps & Cloud Cost Optimization Engineering"
+            ],
+            "target_roles": [
+              "Senior Cloud Architect",
+              "Senior DevOps Engineer",
+              "Infrastructure Operations Manager"
+            ]
+          }
         ]
       }
     }

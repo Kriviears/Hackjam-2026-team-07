@@ -1,0 +1,71 @@
+{
+  "data_engineering": {
+    "track_id": "data_engineering",
+    "track_title": "AI Native Business Intelligence Training",
+    "avg_salary": "$55,000 - $70,000 / year",
+    "timeline": {
+      "junior": {
+        "status": "active",
+        "label": "Step 1: Junior Level Foundations",
+        "courses": [
+          {
+            "course_id": "bi_fundamentals_analyst",
+            "course_name": "Business Intelligence Foundations",
+            "skills": [
+              "SQL Queries & Relational Databases (PostgreSQL / MySQL)",
+              "Data Visualization Tools (Tableau, Power BI)",
+              "Data Cleansing & Basic ETL/ELT Concepts",
+              "Business Metrics & KPI Dashboarding"
+            ],
+            "target_roles": [
+              "Data Analyst",
+              "Business Intelligence Associate"
+            ]
+          }
+        ]
+      },
+      "middle": {
+        "status": "locked",
+        "label": "Step 2: Mid-Level Upskilling (Alumni Program)",
+        "courses": [
+          {
+            "course_id": "ai_native_data_analytics",
+            "course_name": "AI Native Analytics & Engineering",
+            "skills": [
+              "Advanced Python for Data Analysis (Pandas, NumPy)",
+              "AI-Powered BI Tools & LLM Data Agents",
+              "Data Warehousing Concepts (Snowflake / BigQuery)",
+              "Automated Reporting Pipelines & Scripting"
+            ],
+            "target_roles": [
+              "BI Developer",
+              "Junior Data Engineer",
+              "Data Analytics Specialist"
+            ]
+          }
+        ]
+      },
+      "senior": {
+        "status": "locked",
+        "label": "Step 3: Senior Expert Level (On-the-job Growth)",
+        "courses": [
+          {
+            "course_id": "enterprise_data_engineering",
+            "course_name": "Enterprise Data Engineering & AI Infrastructure",
+            "skills": [
+              "Big Data Orchestration (Apache Airflow / Prefect)",
+              "Distributed Computing & Processing (Apache Spark / Databricks)",
+              "Vector Databases & RAG Pipelines for Enterprise BI",
+              "Data Governance, Security & Quality Monitoring"
+            ],
+            "target_roles": [
+              "Data Engineer",
+              "Senior BI Architect",
+              "Analytics Engineer Lead"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
