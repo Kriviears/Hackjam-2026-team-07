@@ -3,6 +3,24 @@ import LandingPage from './pages/LandingPage';
 import Timeline from './components/roadmap/Timeline';
 import ChatWidget from './components/onboarding/ChatWidget';
 import RegisterModal from './components/auth/RegisterModal';
+import { toggleSkill } from './services/api';
+
+// Immutably flips isMastered for a skill matching by name, searching every
+// tier and course. Returns a brand-new roadmap object (never mutates the
+// original) so React actually detects the change and re-renders.
+function toggleSkillInRoadmap(roadmap, skillName) {
+  const updated = structuredClone(roadmap);
+  ["junior", "middle", "senior"].forEach((level) => {
+    updated.timeline[level].courses.forEach((course) => {
+      course.skills.forEach((skill) => {
+        if (skill.name === skillName) {
+          skill.isMastered = !skill.isMastered;
+        }
+      });
+    });
+  });
+  return updated;
+}
 
 // Tracks which "page" is currently showing. Starts at landing, moves to
 // chat once the user clicks "Chart my path", then to the roadmap once
@@ -29,6 +47,18 @@ function App() {
     setIsSaved(true);
   }
 
+  // Updates the UI instantly (so the checkmark flips right away), then
+  // also persists the change to the real backend if this is a saved user.
+  // This used to live in Timeline.jsx and only called the API — since
+  // Timeline doesn't own the roadmap state, that never triggered a
+  // re-render. Moving it here (where roadmap state actually lives) fixes it.
+  async function handleToggleSkill(skillName) {
+    setRoadmap((prev) => toggleSkillInRoadmap(prev, skillName));
+    if (roadmap?.userId) {
+      await toggleSkill(roadmap.userId, skillName);
+    }
+  }
+
   if (screen === 'landing') {
     return <LandingPage onStart={handleStart} />;
   }
@@ -44,9 +74,7 @@ function App() {
   if (screen === 'roadmap') {
     return (
       <div className="min-h-screen bg-[#0A0B0D] pt-10 px-4">
-        {/* userId lets Timeline persist skill-toggle clicks via the API;
-            it's undefined for guests, in which case Timeline just no-ops. */}
-        <Timeline roadmap={roadmap} persona="aspiring_candidate" userId={roadmap?.userId} />
+        <Timeline roadmap={roadmap} onToggleSkill={handleToggleSkill} />
 
         {!isSaved ? (
           <div className="max-w-xl mx-auto mt-4">
@@ -63,10 +91,13 @@ function App() {
           </p>
         )}
 
-        {/* RegisterModal only mounts while isRegisterOpen is true */}
+        {/* RegisterModal only mounts while isRegisterOpen is true.
+            roadmapData is roadmap.track (not the whole roadmap) because the
+            real /api/auth/register endpoint expects a flat object with
+            track_id/title/match_reason directly on it, not nested. */}
         {isRegisterOpen && (
           <RegisterModal
-            roadmapData={roadmap}
+            roadmapData={roadmap.track}
             onClose={() => setIsRegisterOpen(false)}
             onSuccess={handleRegisterSuccess}
           />

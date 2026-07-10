@@ -1,65 +1,73 @@
-// Fake data shaped exactly like wht the real backend api will returb 
-//This Lets the fronted build and test again realistic data befpre the 
-//Real /api/roadmap endpoint is ready Swap USE_MOCk in api.js to switch over 
-
+// Fake data shaped like what the real backend will return. Lets the
+// frontend build and test against realistic data before the real
+// /api/roadmap endpoint is ready. Swap USE_MOCK in api.js to switch over.
+//
+// Shape note: each tier (junior/middle/senior) now holds a `courses` array
+// instead of a flat `skills` array, since a tier can contain more than one
+// course (matches CourseCard.jsx, which flatMaps skills across courses).
 export const mockRoadmap = {
-    userId: "guest_or_real_id", // "guest " until they register or login, then a real Mongo _id 
-    persona: "aspiring_candidate", //drives which UI states show (candidatre/learner/alumni)
-    // fixed typo above: must match "aspiring_candidate" exactly, since
-    // CourseCard checks persona === "aspiring_candidate" to decide whether
-    // to show priority-skill highlighting.
-
-    track: {
-        trackId: "cloud",
-            title: "Cloud Support Associate",
-            match_reason: "You menttioned checking systems calmly under pressure, which points to infrastucture and support work.",
-            avg_salary: "$55,000 -$65,000 / year ",
-            // Skills the AI recommends tackling next, used by CourseCard to
-            // show "recommended next" badges for aspiring_candidate persona.
-            priority_skills: ["Core AWS Services (EC2, S3, IAM)", "Helpdesk Ticket Management"]
-        },
-
-
-        // Career levels, in order. Only  "junior" is unlocked for brand-new  user
-        //Middle/senior stay locked until they progress ( shown as grayed- out in the UI)
-
-        timeline: {
-            junior: {
-                status: "active",
-                course: "AWS re/Start Training Program",
-                progress_percent: 46,
-                //Each skill tracks whether tge user has already mastered it Powers the chackmark vs, circle icon in CourseCard
-                skills: [
-                    { name: "Linux CLI & basic bash Scripts", isMastered: true },
-                    { name: "Basic Networking (DNS, TCP/IP)", isMastered: true },
-                    {name: "Core AWS Services (EC2, S3, IAM)", isMastered: false },
-                    {name: "Helpdesk Ticket Management", isMastered: false },
-                ]
-
-        },
-        middle: {
-            status: "locked",
-            course: "Advanced Azure & DevOps Upskilling",
-            skills: [
-                {name: "Multi_Cloud (Microsoft Azure", isMastered: false },
-                {name: "Containers basics (Docker)", isMastered: false },
-                {name: " Infrastructure as Code (Terraform)", isMastered: false },
-            ]
-        },
-        senior: {
-            status: "locked",
-            course: "Enterprise Cloud Architect ",
-            skills: [
-                {name: "Container Orchestration (Kubernetes)", isMastered: false },
-                {name: "FinOps (Cost Optimixation)", isMastered: false },
-
-            ]
+  userId: "guest_or_real_id",
+  persona: "aspiring_candidate",
+  track: {
+    track_id: "cloud",
+    title: "Cloud Support Associate",
+    track_title: "Cloud Support Associate",
+    match_reason: "You mentioned checking systems calmly under pressure, which points to infrastructure and support work.",
+    soft_skills: ["Patience", "Problem-solving", "Attention to detail"],
+    mentor_style_match: "A practical mentor with strong technical troubleshooting experience.",
+    growth_areas: ["Time management under pressure", "Structured troubleshooting"]
+  },
+  timeline: {
+    junior: {
+      status: "active",
+      label: "Step 1: Junior Level Foundations",
+      courses: [
+        {
+          course_id: "aws_restart",
+          course_name: "AWS re/Start Training",
+          type: "core_course",
+          skills: [
+            { name: "Linux CLI & Basic Bash Scripting", isMastered: true },
+            { name: "Basic Networking (DNS, TCP/IP)", isMastered: true },
+            { name: "Core AWS Services (EC2, S3, IAM)", isMastered: false },
+            { name: "Helpdesk Ticket Management", isMastered: false }
+          ],
+          target_roles: ["Cloud Support Associate", "Junior Systems Administrator"]
+        }
+      ]
+    },
+    middle: {
+      status: "locked",
+      label: "Step 2: Mid-Level Upskilling (Alumni Program)",
+      courses: [
+        {
+          course_id: "azure_devops",
+          course_name: "Advanced Azure & DevOps Upskilling",
+          type: "upskilling_course",
+          skills: [
+            { name: "Multi-Cloud (Microsoft Azure)", isMastered: false },
+            { name: "Containers Basics (Docker)", isMastered: false },
+            { name: "Infrastructure as Code (Terraform)", isMastered: false }
+          ],
+          target_roles: ["Azure Cloud Engineer", "Cloud Support Specialist"]
+        }
+      ]
+    },
+    senior: {
+      status: "locked",
+      label: "Step 3: Senior Level Specialization",
+      courses: [
+        {
+          course_id: "enterprise_cloud",
+          course_name: "Enterprise Cloud Architecture",
+          type: "upskilling_course",
+          skills: [
+            { name: "Container Orchestration (Kubernetes)", isMastered: false },
+            { name: "FinOps (Cost Optimization)", isMastered: false }
+          ],
+          target_roles: ["Senior Cloud Architect"]
+        }
+      ]
     }
-},
-
-//Sample mentor (s) tied to this track - real version would query actual alumni
-
-mentors: [
-    {name: "Sampple Mentor", role: "Cloud Support Associate", track: "cloud"}
-]
+  }
 };
