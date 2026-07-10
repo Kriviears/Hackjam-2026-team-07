@@ -13,6 +13,10 @@ const app = express();
 // 1. MIDDLEWARES  
 app.use(express.json());
 app.use(cors());
+// app.use(cors({ 
+//   origin: process.env.FRONTEND_URL,
+//   credentials: true
+// }));
 
 // 2. DATABASE CONNECTION  
 const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/perscholas';
