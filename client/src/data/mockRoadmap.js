@@ -6,7 +6,7 @@ export const mockRoadmap = {
     userId: "guest_or_real_id", // "guest " until they register or login, then a real Mongo _id 
     persona: "aspiring_candiate", //drives which UI states show (candidatre/learner/alumni)
 
-    tracks: {
+    track: {
         trackId: "cloud",
             title: "Cloud Support Associate",
             match_reason: "You menttioned checking systems calmly under pressure, which points to infrastucture and support work.",
