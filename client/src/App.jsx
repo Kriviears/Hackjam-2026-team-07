@@ -34,7 +34,11 @@ function App() {
   if (screen === 'roadmap') {
     return (
       <div className="min-h-screen bg-[#0A0B0D] pt-10">
-        <Timeline roadmap={roadmap} />
+        <Timeline
+          roadmap={roadmap}
+          persona="aspiring_candidate"
+          userId={roadmap?.userId}
+        />
       </div>
     );
   }

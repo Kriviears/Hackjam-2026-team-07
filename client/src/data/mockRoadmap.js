@@ -4,13 +4,19 @@
 
 export const mockRoadmap = {
     userId: "guest_or_real_id", // "guest " until they register or login, then a real Mongo _id 
-    persona: "aspiring_candiate", //drives which UI states show (candidatre/learner/alumni)
+    persona: "aspiring_candidate", //drives which UI states show (candidatre/learner/alumni)
+    // fixed typo above: must match "aspiring_candidate" exactly, since
+    // CourseCard checks persona === "aspiring_candidate" to decide whether
+    // to show priority-skill highlighting.
 
     track: {
         trackId: "cloud",
             title: "Cloud Support Associate",
             match_reason: "You menttioned checking systems calmly under pressure, which points to infrastucture and support work.",
-            avg_salary: "$55,000 -$65,000 / year "
+            avg_salary: "$55,000 -$65,000 / year ",
+            // Skills the AI recommends tackling next, used by CourseCard to
+            // show "recommended next" badges for aspiring_candidate persona.
+            priority_skills: ["Core AWS Services (EC2, S3, IAM)", "Helpdesk Ticket Management"]
         },
 
 
