@@ -11,6 +11,7 @@
           {
             "course_id": "aws_restart_training",
             "course_name": "AWS re/Start Training",
+            "type": "core_course",
             "skills": [
               "Linux CLI & Basic Bash Scripting",
               "Networking Fundamentals (DNS, TCP/IP, Ports)",
@@ -31,6 +32,7 @@
           {
             "course_id": "azure_cloud_practitioner",
             "course_name": "Cloud Azure Cloud Practitioner",
+            "type": "upskilling_course",
             "skills": [
               "Multi-Cloud Administration (Microsoft Azure Core)",
               "Containers Management & Basics (Docker)",
@@ -52,6 +54,7 @@
           {
             "course_id": "enterprise_cloud_architecture",
             "course_name": "Enterprise Cloud Architecture",
+            "type": "upskilling_course",
             "skills": [
               "Enterprise Container Orchestration (Kubernetes / EKS)",
               "End-to-End CI/CD Automation Pipelines (GitHub Actions, GitLab)",

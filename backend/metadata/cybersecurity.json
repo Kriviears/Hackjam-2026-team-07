@@ -11,6 +11,7 @@
           {
             "course_id": "cybersecurity_analyst_training",
             "course_name": "Cybersecurity Analyst Training",
+            "type": "core_course",
             "skills": [
               "Network Security Basics",
               "Log Analysis & Incident Response",
@@ -26,6 +27,7 @@
           {
             "course_id": "cybersecurity_ai_tools_training",
             "course_name": "Cybersecurity with AI Tools Training",
+            "type": "core_course",
             "skills": [
               "AI-Powered Threat Detection",
               "Automated Log Auditing",
@@ -47,6 +49,7 @@
           {
             "course_id": "advanced_pentesting",
             "course_name": "Advanced Ethical Hacking & Penetration Testing",
+            "type": "upskilling_course",
             "skills": [
               "Penetration Testing Frameworks",
               "Vulnerability Assessment",
@@ -66,6 +69,7 @@
           {
             "course_id": "enterprise_security_leadership",
             "course_name": "Enterprise Security Leadership & Risk Management",
+            "type": "upskilling_course",
             "skills": [
               "Enterprise Risk Management & Corporate CISO Strategy",
               "Compliance & Regulations (GDPR, HIPAA, SOC2, ISO27001)",

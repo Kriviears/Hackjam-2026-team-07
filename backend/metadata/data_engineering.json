@@ -11,6 +11,7 @@
           {
             "course_id": "bi_fundamentals_analyst",
             "course_name": "Business Intelligence Foundations",
+            "type": "core_course",
             "skills": [
               "SQL Queries & Relational Databases (PostgreSQL / MySQL)",
               "Data Visualization Tools (Tableau, Power BI)",
@@ -31,6 +32,7 @@
           {
             "course_id": "ai_native_data_analytics",
             "course_name": "AI Native Analytics & Engineering",
+            "type": "upskilling_course",
             "skills": [
               "Advanced Python for Data Analysis (Pandas, NumPy)",
               "AI-Powered BI Tools & LLM Data Agents",
@@ -51,6 +53,7 @@
         "courses": [
           {
             "course_id": "enterprise_data_engineering",
+            "type": "upskilling_course",
             "course_name": "Enterprise Data Engineering & AI Infrastructure",
             "skills": [
               "Big Data Orchestration (Apache Airflow / Prefect)",

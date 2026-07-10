@@ -11,6 +11,7 @@
           {
             "course_id": "frontend_react_developer",
             "course_name": "React Developer Essentials",
+            "type": "core_course",
             "skills": [
               "Advanced JavaScript (ES6+) & TypeScript Basics",
               "React Core Concepts (Hooks, Context API, Component Lifecycle)",
@@ -31,6 +32,7 @@
           {
             "course_id": "fullstack_node_integration",
             "course_name": "Full Stack Developer Program",
+            "type": "upskilling_course",
             "skills": [
               "Backend Development (Node.js, Express.js / NestJS)",
               "Database Design & Management (PostgreSQL, MongoDB, Prisma)",
@@ -52,6 +54,7 @@
           {
             "course_id": "enterprise_software_architecture",
             "course_name": "Advanced Software Engineering",
+            "type": "upskilling_course",
             "skills": [
               "System Design & Microservices Architecture",
               "Performance Optimization & Caching Strategies (Redis)",

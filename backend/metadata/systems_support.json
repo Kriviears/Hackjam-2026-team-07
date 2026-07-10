@@ -11,6 +11,7 @@
           {
             "course_id": "it_support_training",
             "course_name": "IT Support Training",
+            "type": "core_course",
             "skills": [
               "Hardware & Software Troubleshooting",
               "Operating Systems (Windows, macOS, Linux)",
@@ -27,6 +28,7 @@
           {
             "course_id": "low_voltage_telecom_training",
             "course_name": "Low Voltage Telecom Training",
+            "type": "core_course",
             "skills": [
               "Structured Cabling & Wire Termination",
               "AV Systems Setup & Calibration",
@@ -48,6 +50,7 @@
           {
             "course_id": "nextgen_it_support_ai_powered",
             "course_name": "NextGen IT Support (AI-Powered) Training",
+            "type": "upskilling_course",
             "skills": [
               "AI-Driven Ticket Categorization & Analysis",
               "Automated Remote Management & Monitoring (RMM)",
@@ -64,6 +67,7 @@
           {
             "course_id": "ai_enabled_healthcare_it_technician",
             "course_name": "AI-Enabled Healthcare IT Technician Training",
+            "type": "upskilling_course",
             "skills": [
               "HIPAA & Healthcare Data Privacy Standards",
               "Electronic Health Records (EHR) Systems Support",
@@ -79,6 +83,7 @@
           {
             "course_id": "ai_enabled_it_support_training",
             "course_name": "AI-Enabled IT Support Training",
+            "type": "upskilling_course",
             "skills": [
               "Prompt Engineering for IT Service Desks",
               "Scripting with Copilot / AI Assistants",
@@ -101,6 +106,7 @@
           {
             "course_id": "data_center_technician_ai_tools",
             "course_name": "Data Center Technician with AI Tools Training",
+            "type": "upskilling_course",
             "skills": [
               "AI-Powered Power & Cooling Optimization (FinOps)",
               "Server Hardware Architecture & SAS/SATA/NVMe",
@@ -116,6 +122,7 @@
           {
             "course_id": "salesforce_administrator_training",
             "course_name": "Salesforce Administrator Training",
+            "type": "upskilling_course",
             "skills": [
               "Salesforce Platform Configuration & Customization",
               "CRM Workflow & Process Automation (Flow Builder)",
