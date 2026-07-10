@@ -1,0 +1,65 @@
+{
+  "cloud": {
+    "track_id": "cloud",
+    "track_title": "Cloud & DevOps Specialist",
+    "avg_salary": "$60,000 - $75,000 / year",
+    "timeline": {
+      "junior": {
+        "status": "active",
+        "label": "Step 1: Junior Level Foundations",
+        "courses": [
+          {
+            "course_id": "aws_restart_training",
+            "course_name": "AWS re/Start Training",
+            "skills": [
+              "Linux CLI & Basic Bash Scripting",
+              "Networking Fundamentals (DNS, TCP/IP, Ports)",
+              "Core AWS Services (EC2, S3, IAM, VPC)",
+              "Helpdesk & Support Ticket Management"
+            ],
+            "target_roles": [
+              "Cloud Support Associate",
+              "Junior Systems Administrator"
+            ]
+          }
+        ]
+      },
+      "middle": {
+        "status": "locked",
+        "label": "Step 2: Mid-Level Upskilling (Alumni Program)",
+        "courses": [
+          {
+            "course_id": "azure_cloud_practitioner",
+            "course_name": "Cloud Azure Cloud Practitioner",
+            "skills": [
+              "Multi-Cloud Administration (Microsoft Azure Core)",
+              "Containers Management & Basics (Docker)",
+              "Infrastructure as Code (Intro to Terraform)",
+              "Automation & Scripting (Python / Advanced Shell)"
+            ],
+            "target_roles": [
+              "Azure Cloud Engineer",
+              "Cloud Support Associate",
+              "Cloud Application Support Specialist"
+            ]
+          }
+        ]
+      },
+      "senior": {
+        "status": "locked",
+        "label": "Step 3: Senior Expert Level (On-the-job Growth)",
+        "target_roles": [
+          "Senior Cloud Architect",
+          "Senior DevOps Engineer",
+          "Infrastructure Operations Manager"
+        ],
+        "skills": [
+          "Enterprise Container Orchestration (Kubernetes / EKS)",
+          "End-to-End CI/CD Automation Pipelines (GitHub Actions, GitLab)",
+          "Application Performance Monitoring & Alerting (Grafana, Prometheus)",
+          "FinOps & Cloud Cost Optimization Engineering"
+        ]
+      }
+    }
+  }
+}

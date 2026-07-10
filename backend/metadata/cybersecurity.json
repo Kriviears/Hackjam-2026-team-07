@@ -1,0 +1,79 @@
+{
+  "cybersecurity": {
+    "track_id": "cybersecurity",
+    "track_title": "Cybersecurity Specialist",
+    "avg_salary": "$70,000 - $85,000 / year",
+    "timeline": {
+      "junior": {
+        "status": "active",
+        "label": "Step 1: Junior Level Foundations",
+        "courses": [
+          {
+            "course_id": "cybersecurity_analyst_training",
+            "course_name": "Cybersecurity Analyst Training",
+            "skills": [
+              "Network Security Basics",
+              "Log Analysis & Incident Response",
+              "Firewall & IDS/IPS Configuration",
+              "OWASP Top 10 Vulnerabilities"
+            ],
+            "target_roles": [
+              "Cybersecurity Analyst",
+              "IT Security Engineer",
+              "Network Security Analyst"
+            ]
+          },
+          {
+            "course_id": "cybersecurity_ai_tools_training",
+            "course_name": "Cybersecurity with AI Tools Training",
+            "skills": [
+              "AI-Powered Threat Detection",
+              "Automated Log Auditing",
+              "Security Automation Scripts",
+              "Anomalous Behavior Identification"
+            ],
+            "target_roles": [
+              "Systems Administrator",
+              "IT Security Administrator",
+              "Cybersecurity Analyst"
+            ]
+          }
+        ]
+      },
+      "middle": {
+        "status": "locked",
+        "label": "Step 2: Mid-Level Upskilling",
+        "courses": [
+          {
+            "course_id": "advanced_pentesting",
+            "course_name": "Advanced Ethical Hacking & Penetration Testing",
+            "skills": [
+              "Penetration Testing Frameworks",
+              "Vulnerability Assessment",
+              "Exploit Development Basics"
+            ],
+            "target_roles": [
+              "Penetration Tester",
+              "SecOps Engineer"
+            ]
+          }
+        ]
+      },
+    "senior": {
+        "status": "locked",
+        "label": "Step 3: Senior Expert Level (Long-Term Trajectory)",
+        "target_roles": [
+          "Chief Information Security Officer (CISO)",
+          "Lead Security Architect",
+          "Director of IT Infrastructure"
+        ],
+        "skills": [
+          "Enterprise Risk Management & Corporate CISO Strategy",
+          "Compliance & Regulations (GDPR, HIPAA, SOC2, ISO27001)",
+          "Incident Crisis Management & Disaster Recovery Leadership",
+          "Security Budgeting, Vendor Management & Tech Team Leadership"
+        ]
+      }
+    }
+  }
+}
