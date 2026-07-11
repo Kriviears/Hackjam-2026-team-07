@@ -1,12 +1,14 @@
-// Modal that lets a guest turn their generated roadmap into a saved account.
-// Appears over the roadmap screen when they click "Save my plan".
 import { useState } from 'react';
 import { registerUser } from '../../services/api';
 
+// Adds a persona selector so new accounts genuinely reflect who the user
+// is (aspiring candidate, current learner, or alumni) instead of every
+// account defaulting to the same thing.
 function RegisterModal({ roadmapData, onClose, onSuccess }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [persona, setPersona] = useState('aspiring_candidate');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -21,13 +23,11 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
 
     setIsSubmitting(true);
     try {
-      const result = await registerUser(name, email, password, roadmapData);
-      // Save the token so a future visit can fetch this saved roadmap
-      // without logging in again.
+      const result = await registerUser(name, email, password, { ...roadmapData, persona });
       localStorage.setItem('illuminate_token', result.token);
-      onSuccess(result.token); // tells App.jsx registration succeeded
+      onSuccess(result.token);
     } catch (err) {
-      console.error('Registration failed:', err);
+      console.error(err);
       setError('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -35,7 +35,6 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
   }
 
   return (
-    // Dark backdrop covers the roadmap screen behind the modal
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
       <div className="bg-[#141518] border border-white/10 rounded-xl p-6 w-full max-w-sm">
         <div className="flex justify-between items-center mb-4">
@@ -65,6 +64,17 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
             onChange={(e) => setPassword(e.target.value)}
             className="bg-white/5 border border-white/15 rounded-lg px-4 py-2 text-sm text-white placeholder-gray-500"
           />
+
+          <label className="text-xs text-gray-400 mt-1">I am a:</label>
+          <select
+            value={persona}
+            onChange={(e) => setPersona(e.target.value)}
+            className="bg-white/5 border border-white/15 rounded-lg px-4 py-2 text-sm text-white"
+          >
+            <option value="aspiring_candidate">Aspiring Candidate</option>
+            <option value="learner">Current Learner</option>
+            <option value="alumni">Alumni</option>
+          </select>
 
           {error && <p className="text-red-400 text-xs">{error}</p>}
 
