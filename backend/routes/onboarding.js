@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { Mistral } = require('@mistralai/mistralai');
-const { getTrackMetadata } = require('../utils/trackMetadata');
+const Track = require('../models/Track');
 const { loadSystemPrompt } = require('../utils/loadSystemPrompt');
 
 const onboardingLimiter = rateLimit({
@@ -55,11 +55,11 @@ router.post('/', onboardingLimiter, async (req, res) => {
     const aiData = JSON.parse(rawAiContent.trim());
     const selectedTrackId = aiData.track_id; // expectation: 'cloud' or 'cybersecurity'
 
-    // 5. THE MERGE ENGINE LOGIC: Read static content from files without hitting MongoDB
-    const trackConfig = getTrackMetadata(selectedTrackId);
+    // 5. THE MERGE ENGINE LOGIC: Load the selected track and courses from MongoDB.
+    const trackConfig = await Track.findOne({ track_id: selectedTrackId }).lean();
     
     if (!trackConfig) {
-      return res.status(500).json({ error: "Matched track metadata file not found on server." });
+      return res.status(404).json({ error: "Matched track is not available." });
     }
 
     // Inject the AI personalized reason into the response track object

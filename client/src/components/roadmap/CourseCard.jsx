@@ -42,7 +42,7 @@ function CourseCard({ level, data, onToggleSkill }) {
               {course.skills.map((skill, index) => (
                 <li
                   key={index}
-                  onClick={onToggleSkill ? () => onToggleSkill(skill.name) : undefined}
+                  onClick={onToggleSkill ? () => onToggleSkill(course.course_id, skill.name) : undefined}
                   className={`flex items-center gap-2 text-sm ${
                     skill.isMastered ? "text-[#7FBF9E]" : "text-[#6B6660]"
                   } ${onToggleSkill ? "cursor-pointer hover:opacity-70" : ""}`}

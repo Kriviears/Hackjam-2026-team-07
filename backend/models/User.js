@@ -1,5 +1,26 @@
 const mongoose = require('mongoose');
 
+const CourseProgressSchema = new mongoose.Schema({
+  course_id: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['locked', 'active', 'completed'],
+    default: 'locked'
+  },
+  completedSkills: {
+    type: [String],
+    default: []
+  },
+  coursePercent: {
+    type: Number,
+    default: 0
+  },
+  completedAt: Date
+}, { _id: false });
+
 const UserSchema = new mongoose.Schema({
 
   name: {
@@ -33,15 +54,10 @@ const UserSchema = new mongoose.Schema({
   },
 
   progress: {
-    coursePercent: { 
-      type: Number, 
-      default: 0
+    courses: {
+      type: [CourseProgressSchema],
+      default: []
     },
- 
-    completedSkills: { 
-      type: [String], 
-      default: [] 
-    }
   },
 
   ai_profile: {
@@ -54,8 +70,7 @@ const UserSchema = new mongoose.Schema({
       required: false 
     },
     match_reason: { 
-      type: String, 
-      required: true 
+      type: String
     },
     growth_areas    : { 
       type: [String], 
