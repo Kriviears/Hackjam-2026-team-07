@@ -1,0 +1,143 @@
+{
+  "systems_support": {
+    "track_id": "systems_support",
+    "track_title": "Systems Support & Infrastructure Specialist",
+    "avg_salary": "$50,000 - $68,000 / year",
+    "timeline": {
+      "junior": {
+        "status": "active",
+        "label": "Step 1: Junior Level Foundations",
+        "courses": [
+          {
+            "course_id": "it_support_training",
+            "course_name": "IT Support Training",
+            "type": "core_course",
+            "skills": [
+              "Hardware & Software Troubleshooting",
+              "Operating Systems (Windows, macOS, Linux)",
+              "Customer Service & Communication",
+              "Basic Network Setup & Configuration"
+            ],
+            "target_roles": [
+              "IT Technician",
+              "System Administrator",
+              "Help Desk Analyst",
+              "Desktop Support Technician"
+            ]
+          },
+          {
+            "course_id": "low_voltage_telecom_training",
+            "course_name": "Low Voltage Telecom Training",
+            "type": "core_course",
+            "skills": [
+              "Structured Cabling & Wire Termination",
+              "AV Systems Setup & Calibration",
+              "Security & Alarm System Installation",
+              "Safety Standards & Telecommunication Codes"
+            ],
+            "target_roles": [
+              "Low Voltage Technicians",
+              "Audio Video Technicians",
+              "Alarm Technicians"
+            ]
+          }
+        ]
+      },
+      "middle": {
+        "status": "locked",
+        "label": "Step 2: Mid-Level Upskilling (Alumni Program)",
+        "courses": [
+          {
+            "course_id": "nextgen_it_support_ai_powered",
+            "course_name": "NextGen IT Support (AI-Powered) Training",
+            "type": "upskilling_course",
+            "skills": [
+              "AI-Driven Ticket Categorization & Analysis",
+              "Automated Remote Management & Monitoring (RMM)",
+              "Smart Knowledge Base Management",
+              "AI Chatbot Triage Configuration"
+            ],
+            "target_roles": [
+              "IT Technician",
+              "System Administrator",
+              "Help Desk Analyst",
+              "Desktop Support Technician"
+            ]
+          },
+          {
+            "course_id": "ai_enabled_healthcare_it_technician",
+            "course_name": "AI-Enabled Healthcare IT Technician Training",
+            "type": "upskilling_course",
+            "skills": [
+              "HIPAA & Healthcare Data Privacy Standards",
+              "Electronic Health Records (EHR) Systems Support",
+              "AI Diagnostics Infrastructure Maintenance",
+              "Clinical Telemetry Network Troubleshooting"
+            ],
+            "target_roles": [
+              "Healthcare IT Support Specialists",
+              "Clinical Systems Support Technicians",
+              "Healthcare Help Desk Analysts"
+            ]
+          },
+          {
+            "course_id": "ai_enabled_it_support_training",
+            "course_name": "AI-Enabled IT Support Training",
+            "type": "upskilling_course",
+            "skills": [
+              "Prompt Engineering for IT Service Desks",
+              "Scripting with Copilot / AI Assistants",
+              "Incident Auto-Remediation Workflow Setup",
+              "Advanced Endpoint Security Automation"
+            ],
+            "target_roles": [
+              "IT Technician",
+              "System Administrator",
+              "Help Desk Analyst",
+              "Desktop Support Technician"
+            ]
+          }
+        ]
+      },
+      "senior": {
+        "status": "locked",
+        "label": "Step 3: Senior Expert Level (On-the-job Growth)",
+        "courses": [
+          {
+            "course_id": "data_center_technician_ai_tools",
+            "course_name": "Data Center Technician with AI Tools Training",
+            "type": "upskilling_course",
+            "skills": [
+              "AI-Powered Power & Cooling Optimization (FinOps)",
+              "Server Hardware Architecture & SAS/SATA/NVMe",
+              "Disaster Recovery & Redundancy Planning",
+              "Network Switches & Enterprise Routers Configuration"
+            ],
+            "target_roles": [
+              "Network Technicians",
+              "Data Center Technicians",
+              "IT Infrastructure Managers"
+            ]
+          },
+          {
+            "course_id": "salesforce_administrator_training",
+            "course_name": "Salesforce Administrator Training",
+            "type": "upskilling_course",
+            "skills": [
+              "Salesforce Platform Configuration & Customization",
+              "CRM Workflow & Process Automation (Flow Builder)",
+              "User Management, Security, and Data Governance",
+              "Advanced Reporting, Dashboards, and Analytics"
+            ],
+            "target_roles": [
+              "Salesforce Platform Administrator",
+              "CRM Specialist",
+              "Salesforce Consultants",
+              "Salesforce Business Analyst"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

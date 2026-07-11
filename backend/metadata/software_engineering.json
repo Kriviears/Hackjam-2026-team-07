@@ -1,0 +1,74 @@
+{
+  "software_engineering": {
+    "track_id": "software_engineering",
+    "track_title": "Software Engineering Training",
+    "avg_salary": "$65,000 - $85,000 / year",
+    "timeline": {
+      "junior": {
+        "status": "active",
+        "label": "Step 1: Junior Level Foundations",
+        "courses": [
+          {
+            "course_id": "frontend_react_developer",
+            "course_name": "React Developer Essentials",
+            "type": "core_course",
+            "skills": [
+              "Advanced JavaScript (ES6+) & TypeScript Basics",
+              "React Core Concepts (Hooks, Context API, Component Lifecycle)",
+              "State Management (Redux Toolkit / Zustand)",
+              "Responsive UI Development (Tailwind CSS, HTML5/CSS3)"
+            ],
+            "target_roles": [
+              "Junior Frontend Developer",
+              "React Developer"
+            ]
+          }
+        ]
+      },
+      "middle": {
+        "status": "locked",
+        "label": "Step 2: Mid-Level Upskilling (Alumni Program)",
+        "courses": [
+          {
+            "course_id": "fullstack_node_integration",
+            "course_name": "Full Stack Developer Program",
+            "type": "upskilling_course",
+            "skills": [
+              "Backend Development (Node.js, Express.js / NestJS)",
+              "Database Design & Management (PostgreSQL, MongoDB, Prisma)",
+              "RESTful API Design & Authentication (JWT, OAuth2)",
+              "Unit & Integration Testing (Jest, React Testing Library)"
+            ],
+            "target_roles": [
+              "Full Stack Developer",
+              "Frontend Engineer",
+              "Backend Developer"
+            ]
+          }
+        ]
+      },
+      "senior": {
+        "status": "locked",
+        "label": "Step 3: Senior Expert Level (On-the-job Growth)",
+        "courses": [
+          {
+            "course_id": "enterprise_software_architecture",
+            "course_name": "Advanced Software Engineering",
+            "type": "upskilling_course",
+            "skills": [
+              "System Design & Microservices Architecture",
+              "Performance Optimization & Caching Strategies (Redis)",
+              "CI/CD Workflows for Web Applications (Docker, GitHub Actions)",
+              "Software Design Patterns & Clean Architecture Principles"
+            ],
+            "target_roles": [
+              "Senior Software Engineer",
+              "Full Stack Tech Lead",
+              "Software Architect"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
