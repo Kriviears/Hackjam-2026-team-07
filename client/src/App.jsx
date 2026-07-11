@@ -105,7 +105,8 @@ function App() {
   if (screen === 'roadmap') {
     return (
       <div className="min-h-screen bg-[#0A0B0D] pt-10 px-4">
-        <Timeline roadmap={roadmap} onToggleSkill={handleToggleSkill} />
+        {/* persona drives Timeline's contextual banners; default to aspiring_candidate */}
+        <Timeline roadmap={roadmap} onToggleSkill={handleToggleSkill} persona={roadmap?.persona || "aspiring_candidate"} />
 
         {!isSaved ? (
           <div className="max-w-xl mx-auto mt-4">
