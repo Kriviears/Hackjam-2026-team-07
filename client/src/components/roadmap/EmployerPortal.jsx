@@ -1,6 +1,9 @@
 // Surfaces every distinct target role across all three tiers of the roadmap,
 // so the learner can see which real-world jobs this path prepares them for.
-function EmployerPortal({ roadmap }) {
+// className/style are optional pass-throughs so a parent (Timeline) can join
+// this into its staggered fade-in animation without EmployerPortal knowing
+// the details of the effect.
+function EmployerPortal({ roadmap, className = "", style }) {
   // Collect target_roles from every course at every level, deduped via a Set.
   const allRoles = new Set();
   ["junior", "middle", "senior"].forEach((level) => {
@@ -14,7 +17,7 @@ function EmployerPortal({ roadmap }) {
   if (roles.length === 0) return null;
 
   return (
-    <div className="mb-6 p-4 rounded-lg bg-[#141518] border border-white/10">
+    <div className={`${className} mb-6 p-4 rounded-lg bg-[#141518] border border-white/10`} style={style}>
       <h3 className="text-[#F0EAE2] font-medium mb-1">Career opportunities on this path</h3>
       <p className="text-xs text-[#8A8378] mb-3">Roles this roadmap prepares you for</p>
       {/* Each role rendered as a pill */}

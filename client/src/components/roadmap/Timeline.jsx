@@ -5,6 +5,11 @@ import EmployerPortal from './EmployerPortal';
 // App.jsx, which owns the roadmap state and can actually trigger a re-render.
 // persona drives which contextual banner (if any) is shown at the top.
 function Timeline({ roadmap, onToggleSkill, persona }) {
+  // TEMP DEBUG: inspect the actual shape reaching Timeline. If this logs an
+  // object with an `error` key and no `timeline`, getRoadmap returned a
+  // backend error body instead of a roadmap. Remove once diagnosed.
+  console.log(roadmap);
+
   // True only when the persona is an alumnus AND they've mastered every skill
   // in every junior-tier course — used to nudge them toward the Middle tier.
   const juniorComplete =
@@ -27,7 +32,8 @@ function Timeline({ roadmap, onToggleSkill, persona }) {
         </div>
       )}
 
-      <div className="mb-6 p-4 rounded-lg bg-[#1A1610] border border-[#C9915A]/20">
+      {/* animate-fade-in + a small delay so the summary box slides in first */}
+      <div className="animate-fade-in mb-6 p-4 rounded-lg bg-[#1A1610] border border-[#C9915A]/20" style={{ animationDelay: '0.1s' }}>
         <h2 className="font-medium text-lg mb-1 text-[#F0EAE2]">{roadmap.track.title}</h2>
         <p className="text-[#ADA79E] text-sm mb-2">{roadmap.track.match_reason}</p>
 
@@ -52,15 +58,19 @@ function Timeline({ roadmap, onToggleSkill, persona }) {
         )}
       </div>
 
-      {/* Career opportunities derived from course target_roles */}
-      <EmployerPortal roadmap={roadmap} />
+      {/* Career opportunities derived from course target_roles.
+          className/style are forwarded onto EmployerPortal's own wrapper so it
+          joins the staggered fade, animating in just after the summary box. */}
+      <EmployerPortal roadmap={roadmap} className="animate-fade-in" style={{ animationDelay: '0.2s' }} />
 
-      {["junior", "middle", "senior"].map((level) => (
+      {/* delayIndex (0,1,2) staggers junior→middle→senior after the portal */}
+      {["junior", "middle", "senior"].map((level, index) => (
         <CourseCard
           key={level}
           level={level}
           data={roadmap.timeline[level]}
           onToggleSkill={onToggleSkill}
+          delayIndex={index}
         />
       ))}
     </div>
