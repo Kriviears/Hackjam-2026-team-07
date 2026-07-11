@@ -1,8 +1,11 @@
-// Central place for all backend calls. Switch USE_MOCK to false once
-// Elvira's server is running locally so you can test against the real thing.
+// Central place for all backend calls.
 import { mockRoadmap } from '../data/mockRoadmap';
 
-const USE_MOCK = true;
+// USE_MOCK toggles the whole app's data source. When true, every function
+// below returns canned mock data (no server needed) — useful for frontend
+// work offline. When false, all calls hit the real backend at BASE_URL, which
+// must be running separately.
+const USE_MOCK = false;
 const BASE_URL = 'http://localhost:5000';
 
 // Sends the user's chat answer to the AI, gets back their generated roadmap.
