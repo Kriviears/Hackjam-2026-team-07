@@ -6,18 +6,21 @@ import RegisterModal from './components/auth/RegisterModal';
 import LoginModal from './components/auth/LoginModal';
 import { toggleSkill } from './services/api';
 
-// Immutably flips isMastered for a skill matching by name, searching every
-// tier and course. Returns a brand-new roadmap object (never mutates the
-// original) so React actually detects the change and re-renders.
-function toggleSkillInRoadmap(roadmap, skillName) {
+// Immutably flips isMastered for one skill. We match by courseId FIRST, then
+// by skill name inside that course — because the same skill name can repeat
+// across different courses, so name alone isn't unique. Returns a brand-new
+// roadmap object (never mutates the original) so React detects the change.
+function toggleSkillInRoadmap(roadmap, courseId, skillName) {
   const updated = structuredClone(roadmap);
   ["junior", "middle", "senior"].forEach((level) => {
     updated.timeline[level].courses.forEach((course) => {
-      course.skills.forEach((skill) => {
-        if (skill.name === skillName) {
-          skill.isMastered = !skill.isMastered;
-        }
-      });
+      if (course.course_id === courseId) {
+        course.skills.forEach((skill) => {
+          if (skill.name === skillName) {
+            skill.isMastered = !skill.isMastered;
+          }
+        });
+      }
     });
   });
   return updated;
@@ -65,10 +68,13 @@ function App() {
   // This used to live in Timeline.jsx and only called the API — since
   // Timeline doesn't own the roadmap state, that never triggered a
   // re-render. Moving it here (where roadmap state actually lives) fixes it.
-  async function handleToggleSkill(skillName) {
-    setRoadmap((prev) => toggleSkillInRoadmap(prev, skillName));
+  // courseId is now required (alongside skillName) because the backend keys
+  // toggles by course — skill names can repeat across courses, so both are
+  // needed to target the right one. CourseCard passes both up via onToggleSkill.
+  async function handleToggleSkill(courseId, skillName) {
+    setRoadmap((prev) => toggleSkillInRoadmap(prev, courseId, skillName));
     if (roadmap?.userId) {
-      await toggleSkill(roadmap.userId, skillName);
+      await toggleSkill(roadmap.userId, courseId, skillName);
     }
   }
 
