@@ -1,6 +1,6 @@
 // The first screen users see. Sets a dark, premium tone using pure CSS
 // (no photo needed) — a warm copper glow stands in for a background image.
-function LandingPage({ onStart }) {
+function LandingPage({ onStart, onLogin }) {
   return (
     <div className="relative min-h-screen bg-[#0A0B0D] overflow-hidden">
       {/* Two soft blurred circles create the warm "light source" feeling,
@@ -53,6 +53,13 @@ function LandingPage({ onStart }) {
             Chart my path
           </button>
         </div>
+
+        {/* Secondary path for returning learners/alumni. Kept small and muted
+            (text-xs + #8A8378) so it stays visually below the primary
+            "Chart my path" CTA. Opens the LoginModal via the onLogin prop. */}
+        <button onClick={onLogin} className="text-xs text-[#8A8378] mt-3 underline">
+          Already have an account? Log in
+        </button>
       </div>
 
       {/* Scroll indicator, bottom right */}
