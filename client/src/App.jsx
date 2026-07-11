@@ -3,11 +3,13 @@ import LandingPage from './pages/LandingPage';
 import Timeline from './components/roadmap/Timeline';
 import ChatWidget from './components/onboarding/ChatWidget';
 import RegisterModal from './components/auth/RegisterModal';
+import LoginModal from './components/auth/LoginModal';
 import { toggleSkill } from './services/api';
 
-// Immutably flips isMastered for a skill matching by name, searching every
-// tier and course. Returns a brand-new roadmap object (never mutates the
-// original) so React actually detects the change and re-renders.
+// Immutably flips isMastered for one skill. We match by courseId FIRST, then
+// by skill name inside that course — because the same skill name can repeat
+// across different courses, so name alone isn't unique. Returns a brand-new
+// roadmap object (never mutates the original) so React detects the change.
 function toggleSkillInRoadmap(roadmap, courseId, skillName) {
   const updated = structuredClone(roadmap);
   ["junior", "middle", "senior"].forEach((level) => {
@@ -15,7 +17,7 @@ function toggleSkillInRoadmap(roadmap, courseId, skillName) {
       if (course.course_id === courseId) {
         course.skills.forEach((skill) => {
           if (skill.name === skillName) {
-          skill.isMastered = !skill.isMastered;
+            skill.isMastered = !skill.isMastered;
           }
         });
       }
@@ -31,10 +33,22 @@ function App() {
   const [screen, setScreen] = useState('landing'); // 'landing' | 'chat' | 'roadmap'
   const [roadmap, setRoadmap] = useState(null);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false); // controls RegisterModal visibility
+  const [isLoginOpen, setIsLoginOpen] = useState(false); // controls LoginModal visibility (returning learners)
   const [isSaved, setIsSaved] = useState(false); // swaps the "Save my plan" button for a confirmation message
 
   function handleStart() {
     setScreen('chat');
+  }
+
+  // Called by LoginModal once loginUser + getRoadmap succeed. A returning
+  // learner already has a saved roadmap, so we drop them straight onto the
+  // roadmap screen in the "saved" state — skipping the guest chat and the
+  // "Save my plan" prompt they don't need.
+  function handleLoginSuccess(fetchedRoadmap) {
+    setRoadmap(fetchedRoadmap);
+    setIsSaved(true);
+    setIsLoginOpen(false);
+    setScreen('roadmap');
   }
 
   function handleChatComplete(roadmapData) {
@@ -54,6 +68,9 @@ function App() {
   // This used to live in Timeline.jsx and only called the API — since
   // Timeline doesn't own the roadmap state, that never triggered a
   // re-render. Moving it here (where roadmap state actually lives) fixes it.
+  // courseId is now required (alongside skillName) because the backend keys
+  // toggles by course — skill names can repeat across courses, so both are
+  // needed to target the right one. CourseCard passes both up via onToggleSkill.
   async function handleToggleSkill(courseId, skillName) {
     setRoadmap((prev) => toggleSkillInRoadmap(prev, courseId, skillName));
     if (roadmap?.userId) {
@@ -62,7 +79,19 @@ function App() {
   }
 
   if (screen === 'landing') {
-    return <LandingPage onStart={handleStart} />;
+    return (
+      <>
+        {/* onLogin opens the LoginModal for returning learners/alumni */}
+        <LandingPage onStart={handleStart} onLogin={() => setIsLoginOpen(true)} />
+        {/* LoginModal only mounts while isLoginOpen is true */}
+        {isLoginOpen && (
+          <LoginModal
+            onClose={() => setIsLoginOpen(false)}
+            onSuccess={handleLoginSuccess}
+          />
+        )}
+      </>
+    );
   }
 
   if (screen === 'chat') {
