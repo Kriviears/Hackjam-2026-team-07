@@ -63,14 +63,14 @@ export async function getRoadmap(userId, token) {
 // Marks one skill as mastered — a nice interactive touch letting users
 // check off skills themselves. Stretch goal, not core MVP.
 // Real endpoint: PATCH /api/roadmap/toggle-skill
-export async function toggleSkill(userId, skillName) {
+export async function toggleSkill(userId, courseId, skillName) {
   if (USE_MOCK) {
     return new Promise((resolve) => setTimeout(() => resolve({ success: true }), 400));
   }
   const res = await fetch(`${BASE_URL}/api/roadmap/toggle-skill`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, skillName }),
+    body: JSON.stringify({ userId, courseId, skillName }),
   });
   return res.json();
 }

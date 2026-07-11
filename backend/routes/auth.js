@@ -44,8 +44,7 @@ router.post('/register', async (req, res) => {
         growth_areas: Array.isArray(roadmapData.growth_areas) ? roadmapData.growth_areas : []
       },
       progress: {
-        coursePercent: 0,
-        completedSkills: []
+        courses: []
       }
     });
 
