@@ -3,6 +3,26 @@ const router = express.Router();
 const User = require('../models/User');
 const requireAuth  = require('../middleware/requireAuth');
 const { getTrackMetadata } = require('../utils/trackMetadata');
+const PROGRESS_ENABLED_PERSONAS = ['learner', 'alumni'];
+
+const getTierSkills = (trackConfig, tierName) => {
+  const tier = trackConfig.timeline && trackConfig.timeline[tierName];
+
+  if (!tier || !Array.isArray(tier.courses)) {
+    return [];
+  }
+
+  return tier.courses.flatMap((course) => Array.isArray(course.skills) ? course.skills : []);
+};
+
+const calculateProgressPercent = (completedSkills, tierSkills) => {
+  if (!tierSkills.length) {
+    return 0;
+  }
+
+  const completedCount = tierSkills.filter((skillName) => completedSkills.includes(skillName)).length;
+  return Math.round((completedCount / tierSkills.length) * 100);
+};
 
 // @route   GET /api/roadmap/:userId
 // @desc    Dynamic Merge Engine. Combines user's DB progress with static JSON metadata configs
@@ -24,17 +44,21 @@ router.get('/:userId', requireAuth, async (req, res) => {
       return res.status(500).json({ error: "Configuration template file missing for this track ID." });
     }
 
-    const completedSkills = user.progress && Array.isArray(user.progress.completedSkills)
+    const canTrackProgress = PROGRESS_ENABLED_PERSONAS.includes(user.persona);
+    const completedSkills = canTrackProgress && user.progress && Array.isArray(user.progress.completedSkills)
       ? user.progress.completedSkills
       : [];
-    const coursePercent = user.progress && typeof user.progress.coursePercent === 'number'
-      ? user.progress.coursePercent
-      : 0;
     const aiProfile = user.ai_profile || {};
     const matchReason = aiProfile.match_reason || user.track.match_reason || trackConfig.match_reason || "";
     const softSkills = Array.isArray(aiProfile.soft_skills) ? aiProfile.soft_skills : [];
     const mentorStyleMatch = typeof aiProfile.mentor_style_match === 'string' ? aiProfile.mentor_style_match : "";
     const growthAreas = Array.isArray(aiProfile.growth_areas) ? aiProfile.growth_areas : [];
+    const juniorSkills = getTierSkills(trackConfig, 'junior');
+    const middleSkills = getTierSkills(trackConfig, 'middle');
+    const juniorPercent = calculateProgressPercent(completedSkills, juniorSkills);
+    const middlePercent = calculateProgressPercent(completedSkills, middleSkills);
+    const isJuniorCompleted = juniorSkills.length > 0 && juniorPercent === 100;
+    const isMiddleCompleted = middleSkills.length > 0 && middlePercent === 100;
 
     // 2. MERGE LOGIC FUNCTION: Maps string arrays from DB to active boolean flags for React UI checkboxes
     const mergeCourseSkills = (courses) => {
@@ -50,15 +74,15 @@ router.get('/:userId', requireAuth, async (req, res) => {
     };
 
     // 3. UI LAYOUT STATE CONTROL: Adapts card locks dynamically based on the current user persona
-    const juniorStatus = user.persona === 'alumni' ? 'completed' : 'active';
-    const middleStatus = user.persona === 'alumni' ? 'active' : 'locked';
-    const seniorStatus = 'locked'; // Always locked to show future 5-year trajectory scope
+    const juniorStatus = user.persona === 'alumni' || isJuniorCompleted ? 'completed' : 'active';
+    const middleStatus = isMiddleCompleted ? 'completed' : (user.persona === 'alumni' || isJuniorCompleted ? 'active' : 'locked');
+    const seniorStatus = isMiddleCompleted ? 'active' : 'locked';
 
     const structuralTimelinePayload = {
       junior: {
         status: juniorStatus,
         label: trackConfig.timeline.junior.label,
-        progress_percent: coursePercent, // Feeds React progress bar slider component
+        progress_percent: juniorPercent,
         courses: mergeCourseSkills(trackConfig.timeline.junior.courses)
       },
       middle: {
@@ -117,6 +141,15 @@ router.patch('/toggle-skill', requireAuth, async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
 
+    if (!PROGRESS_ENABLED_PERSONAS.includes(user.persona)) {
+      return res.status(200).json({
+        success: true,
+        completedSkills: [],
+        coursePercent: 0,
+        isCourseCompleted: false
+      });
+    }
+
     const skillIndex = user.progress.completedSkills.indexOf(skillName);
 
     if (skillIndex > -1) {
@@ -127,8 +160,22 @@ router.patch('/toggle-skill', requireAuth, async (req, res) => {
       user.progress.completedSkills.push(skillName);
     }
 
+    const trackConfig = getTrackMetadata(user.track.track_id);
+    if (!trackConfig) {
+      return res.status(500).json({ error: "Configuration template file missing for this track ID." });
+    }
+
+    const juniorSkills = getTierSkills(trackConfig, 'junior');
+    const juniorPercent = calculateProgressPercent(user.progress.completedSkills, juniorSkills);
+    user.progress.coursePercent = juniorPercent;
+
     await user.save();
-    return res.status(200).json({ success: true, completedSkills: user.progress.completedSkills });
+    return res.status(200).json({
+      success: true,
+      completedSkills: user.progress.completedSkills,
+      coursePercent: user.progress.coursePercent,
+      isCourseCompleted: juniorSkills.length > 0 && juniorPercent === 100
+    });
 
   } catch (error) {
     console.error("Progress Checkbox Scoring Error:", error);
