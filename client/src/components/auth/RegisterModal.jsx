@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { registerUser } from '../../services/api';
 
-// Adds a persona selector so new accounts genuinely reflect who the user
-// is (aspiring candidate, current learner, or alumni) instead of every
-// account defaulting to the same thing.
+// Collects name/email/password and registers the user, attaching the
+// generated roadmapData to the new account.
 function RegisterModal({ roadmapData, onClose, onSuccess }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [persona, setPersona] = useState('aspiring_candidate');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -23,7 +21,7 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
 
     setIsSubmitting(true);
     try {
-      const result = await registerUser(name, email, password, { ...roadmapData, persona });
+      const result = await registerUser(name, email, password, roadmapData);
       localStorage.setItem('illuminate_token', result.token);
       onSuccess(result.token);
     } catch (err) {
@@ -64,17 +62,6 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
             onChange={(e) => setPassword(e.target.value)}
             className="bg-white/5 border border-white/15 rounded-lg px-4 py-2 text-sm text-white placeholder-gray-500"
           />
-
-          <label className="text-xs text-gray-400 mt-1">I am a:</label>
-          <select
-            value={persona}
-            onChange={(e) => setPersona(e.target.value)}
-            className="bg-white/5 border border-white/15 rounded-lg px-4 py-2 text-sm text-white"
-          >
-            <option value="aspiring_candidate">Aspiring Candidate</option>
-            <option value="learner">Current Learner</option>
-            <option value="alumni">Alumni</option>
-          </select>
 
           {error && <p className="text-red-400 text-xs">{error}</p>}
 
