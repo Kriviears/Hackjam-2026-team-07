@@ -5,16 +5,6 @@ const Track = require('../models/Track');
 const requireAuth  = require('../middleware/requireAuth');
 const PROGRESS_ENABLED_PERSONAS = ['learner', 'alumni'];
 
-const getTierSkills = (trackConfig, tierName) => {
-  const tier = trackConfig.timeline && trackConfig.timeline[tierName];
-
-  if (!tier || !Array.isArray(tier.courses)) {
-    return [];
-  }
-
-  return tier.courses.flatMap((course) => Array.isArray(course.skills) ? course.skills : []);
-};
-
 const calculateProgressPercent = (completedSkills, tierSkills) => {
   if (!tierSkills.length) {
     return 0;
@@ -24,6 +14,8 @@ const calculateProgressPercent = (completedSkills, tierSkills) => {
   return Math.round((completedCount / tierSkills.length) * 100);
 };
 
+// completedSkills is the only source of truth read here — coursePercent/status are always
+// derived live from it and the course's current skill list, never trusted from a stored snapshot.
 const getCourseProgress = (user, course) => {
   const savedProgress = user.progress && Array.isArray(user.progress.courses)
     ? user.progress.courses.find((progress) => progress.course_id === course.course_id)
@@ -34,22 +26,42 @@ const getCourseProgress = (user, course) => {
   return {
     completedSkills,
     coursePercent,
-    status: savedProgress
-      ? savedProgress.status
-      : coursePercent === 100 ? 'completed' : coursePercent > 0 ? 'active' : 'locked'
+    status: coursePercent === 100 ? 'completed' : coursePercent > 0 ? 'active' : 'locked'
   };
 };
 
-const getTierProgress = (user, tier) => {
+// Percent-only helper for places that don't need the full rendered course list (e.g. toggle-skill).
+const getTierPercent = (user, tier) => {
   const courses = Array.isArray(tier.courses) ? tier.courses : [];
-  const courseProgresses = courses.map((course) => getCourseProgress(user, course));
-  const highestCourseProgressPercent = courseProgresses.reduce(
-    (high, courseProgress) => Math.max(high, courseProgress.coursePercent),
-    0
-  );
+  return courses.reduce((best, course) => Math.max(best, getCourseProgress(user, course).coursePercent), 0);
+};
+
+// Computes each course's progress exactly once, reusing it for both the skill checkmarks
+// and the tier's overall percent — a tier is "passed" once ANY ONE of its courses hits 100%.
+const buildTierView = (user, tier, canTrackProgress) => {
+  const courses = Array.isArray(tier.courses) ? tier.courses : [];
+
+  const renderedCourses = courses.map((course) => {
+    const progress = canTrackProgress
+      ? getCourseProgress(user, course)
+      : { completedSkills: [], coursePercent: 0, status: 'locked' };
+
+    return {
+      ...course,
+      progress,
+      skills: course.skills.map((skillName) => ({
+        name: skillName,
+        isMastered: progress.completedSkills.includes(skillName)
+      }))
+    };
+  });
+
+  const percent = renderedCourses.reduce((best, course) => Math.max(best, course.progress.coursePercent), 0);
 
   return {
-    percent: highestCourseProgressPercent
+    courses: renderedCourses,
+    percent,
+    isCompleted: percent === 100
   };
 };
 
@@ -75,55 +87,38 @@ router.get('/:userId', requireAuth, async (req, res) => {
 
     const canTrackProgress = PROGRESS_ENABLED_PERSONAS.includes(user.persona);
     const aiProfile = user.ai_profile || {};
-    const matchReason = aiProfile.match_reason || user.track.match_reason || trackConfig.match_reason || "";
+    const matchReason = aiProfile.match_reason || "";
     const softSkills = Array.isArray(aiProfile.soft_skills) ? aiProfile.soft_skills : [];
     const mentorStyleMatch = typeof aiProfile.mentor_style_match === 'string' ? aiProfile.mentor_style_match : "";
     const growthAreas = Array.isArray(aiProfile.growth_areas) ? aiProfile.growth_areas : [];
-    const juniorProgress = canTrackProgress
-      ? getTierProgress(user, trackConfig.timeline.junior)
-      : { completedSkills: [], percent: 0 };
-    const middleProgress = canTrackProgress
-      ? getTierProgress(user, trackConfig.timeline.middle)
-      : { completedSkills: [], percent: 0 };
-    const juniorSkills = getTierSkills(trackConfig, 'junior');
-    const middleSkills = getTierSkills(trackConfig, 'middle');
-    const isJuniorCompleted = juniorSkills.length > 0 && juniorProgress.percent === 100;
-    const isMiddleCompleted = middleSkills.length > 0 && middleProgress.percent === 100;
 
-    // 2. MERGE LOGIC FUNCTION: Maps string arrays from DB to active boolean flags for React UI checkboxes
-    const mergeCourseSkills = (courses) => {
-      if (!courses) return [];
-      return courses.map(course => ({
-        ...course,
-        progress: getCourseProgress(user, course),
-        skills: course.skills.map(skillName => ({
-          name: skillName,
-          isMastered: canTrackProgress && getCourseProgress(user, course).completedSkills.includes(skillName)
-        }))
-      }));
-    };
+    // 2. Build each tier once — course progress is computed a single time per course and reused
+    // for both the skill checkmarks and the tier's overall percent.
+    const junior = buildTierView(user, trackConfig.timeline.junior, canTrackProgress);
+    const middle = buildTierView(user, trackConfig.timeline.middle, canTrackProgress);
+    const senior = buildTierView(user, trackConfig.timeline.senior, canTrackProgress);
 
     // 3. UI LAYOUT STATE CONTROL: Unlock tiers solely from completed course progress.
-    const juniorStatus = isJuniorCompleted ? 'completed' : 'active';
-    const middleStatus = isMiddleCompleted ? 'completed' : (isJuniorCompleted ? 'active' : 'locked');
-    const seniorStatus = isMiddleCompleted ? 'active' : 'locked';
+    const juniorStatus = junior.isCompleted ? 'completed' : 'active';
+    const middleStatus = middle.isCompleted ? 'completed' : (junior.isCompleted ? 'active' : 'locked');
+    const seniorStatus = middle.isCompleted ? 'active' : 'locked';
 
     const structuralTimelinePayload = {
       junior: {
         status: juniorStatus,
         label: trackConfig.timeline.junior.label,
-        progress_percent: juniorProgress.percent,
-        courses: mergeCourseSkills(trackConfig.timeline.junior.courses)
+        progress_percent: junior.percent,
+        courses: junior.courses
       },
       middle: {
         status: middleStatus,
         label: trackConfig.timeline.middle.label,
-        courses: mergeCourseSkills(trackConfig.timeline.middle.courses)
+        courses: middle.courses
       },
       senior: {
         status: seniorStatus,
         label: trackConfig.timeline.senior.label,
-        courses: mergeCourseSkills(trackConfig.timeline.senior.courses)
+        courses: senior.courses
       }
     };
 
@@ -211,23 +206,23 @@ router.patch('/toggle-skill', requireAuth, async (req, res) => {
       courseProgress.completedSkills.push(skillName);
     }
 
-    courseProgress.coursePercent = calculateProgressPercent(courseProgress.completedSkills, course.skills);
-    courseProgress.status = courseProgress.coursePercent === 100
+    const courseProgressPercent = calculateProgressPercent(courseProgress.completedSkills, course.skills);
+    courseProgress.status = courseProgressPercent === 100
       ? 'completed'
-      : courseProgress.coursePercent > 0 ? 'active' : 'locked';
+      : courseProgressPercent > 0 ? 'active' : 'locked';
     courseProgress.completedAt = courseProgress.status === 'completed' ? new Date() : undefined;
 
     // Recompute progress for whichever tier this course actually belongs to (not always junior).
     const [, ownerTier] = tierEntries.find(([, tier]) => tier.courses.some((item) => item.course_id === courseId));
-    const tierProgress = getTierProgress(user, ownerTier);
+    const tierProgressPercent = getTierPercent(user, ownerTier);
 
     await user.save();
     return res.status(200).json({
       success: true,
       courseId,
       completedSkills: courseProgress.completedSkills,
-      tierProgressPercent: tierProgress.percent,
-      courseProgressPercent: courseProgress.coursePercent,
+      tierProgressPercent,
+      courseProgressPercent,
       courseStatus: courseProgress.status,
       isCourseCompleted: courseProgress.status === 'completed'
     });
