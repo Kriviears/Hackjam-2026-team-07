@@ -5,11 +5,6 @@ import EmployerPortal from './EmployerPortal';
 // App.jsx, which owns the roadmap state and can actually trigger a re-render.
 // persona drives which contextual banner (if any) is shown at the top.
 function Timeline({ roadmap, onToggleSkill, persona }) {
-  // TEMP DEBUG: inspect the actual shape reaching Timeline. If this logs an
-  // object with an `error` key and no `timeline`, getRoadmap returned a
-  // backend error body instead of a roadmap. Remove once diagnosed.
-  console.log(roadmap);
-
   // True only when the persona is an alumnus AND they've mastered every skill
   // in every junior-tier course — used to nudge them toward the Middle tier.
   const juniorComplete =
