@@ -1,214 +1,193 @@
-# 🚀 Hack Jam 2026 - Team 07
+# Illuminate ✨
 
-Welcome to your team's official Hack Jam 2026 project repository. This is where your team will plan, build, document, and deliver your **Tech Futures: Illuminate Your Path** application prototype.
+**AI-powered career pathing for Per Scholas alumni, learners, and aspiring candidates.**
 
----
+Built by **Team PathPair** for **CGI Hack Jam 2026** — _Tech Futures: Illuminate Your Path._
 
-# Business Case
-
-In today's rapidly evolving digital landscape, the future of a career in tech can feel both limitless and uncertain. Per Scholas alumni, current learners, and aspiring candidates may begin from different starting points, but they share a common challenge: clearly seeing the path from where they are today to where they want to be tomorrow.
-
-Many learners and alumni bring ambition, talent, and technical skills, but the journey forward is not always visible. Some are navigating the transition from training to career. Others are taking their first step into tech or trying to understand what is possible beyond their current reality. The opportunity exists, but the roadmap is often missing.
-
-Without clear direction or meaningful connections to industry, individuals can struggle to transform potential into progress. The challenge is no longer only about gaining skills. It is about envisioning the future, mapping the journey, and confidently moving toward it.
-
----
-
-# Solution Objectives
-
-Your mission is to **design and develop an application that acts as a digital gateway to the future**, guiding Per Scholians from where they are today to where they aspire to be.
-
-An ideal solution should incorporate the following elements in a creative, immersive, and futuristic way:
-
-- ✅ **AI-Powered Career Pathing**
-  - Generate dynamic, personalized roadmaps that chart a user's journey from their current state to their desired tech career
-  - Adapt pathways in real time based on user progress, skills, and goals
-- ✅ **Future Visualization Engine**
-  - Use AI to create compelling visual representations of a user's future career *Optional*
-  - Bring the journey to life through interactive maps, simulations, dashboards, or futuristic UI experiences
-- ✅ **Employer Possibilities Portal**
-  - Show tech companies, mentors, roles, and opportunities aligned with a user's projected career path
-- ✅ **Immersive User Experience**
-  - Design an intuitive, engaging interface that users will love
-  - Provide user profiles and methods to track progress, milestones, and goals
-- ✅ **Scalable Innovation**
-  - Build the solution so it can evolve over time, supporting future users, new technologies, and expanded capabilities
-
----
-
-# Judging Criteria
-
-Projects will be judged based on the following:
-
-- **Idea** - Uniqueness of innovation, creativity in execution, demonstrated value
-- **Design** - Ease of use and design appeal
-- **Implementation** - Functionality and code quality; excellence and technique in execution
-- **Presentation** - Demonstrated team collaboration; excellence in storytelling and pitching; presence and engagement
-
----
-
-# Required AI Integration
-
-Each team must use or implement AI in at least one area of the project. AI should enhance the Tech Futures experience and should not replace the core application functionality.
-
-Possible AI features include:
-
-- Personalized career pathway generation
-- Skill-gap analysis and adaptive roadmap updates
-- Future career visualization, simulations, or interactive journey maps
-- AI chatbots or virtual assistants for onboarding, career guidance, mentorship support, or Q&A
-- Personalized recommendations for learning resources, mentors, companies, events, or opportunities
-- Profile matching between users, mentors, employers, and career paths
-- Engagement analytics and progress insights
-- AI-powered achievement tracking and milestone recommendations
-- Natural language search for career resources, roles, or alumni opportunities
-
-> ⚠️ AI may assist with development, but teams must write the majority of their own code. Fully AI-generated project code is not allowed.
-
----
-
-# Deliverables
-
-Teams must submit a final project by the designated Hack Jam deadline. Final submissions should include:
-
-- [ ] A working prototype or demo
-- [ ] Any visual aids/Presentation in addition to the codebase
-- [ ] A README updated with the project description, setup instructions, and feature overview
-- [ ] A clear explanation of how the solution supports Per Scholas learners, alumni, and aspiring candidates in navigating tech career futures
-- [ ] A list of external resources, open-source libraries, APIs, and assets used
-
-Recommended documentation:
-
-- [ ] `/docs/overview.md` - Technical overview of your solution
-- [ ] `/docs/roadmap.md` - Vision for future development and deployment
-- [ ] `/docs/demo.mp4` - Optional video walkthrough
-- [ ] `/docs/Presentation.ppt` - Powerpoint presentation slides
----
-
-## 🛠 Approved Tech Stack
-
-Participants must use technologies from the approved Hack Jam 2026 whitelist unless they receive explicit approval to use something else.
-
-### Frontend
-
-- React.js - preferred frontend framework
-- Next.js - for server-side rendering or static site generation
-- Vue.js - allowed if justified
-- Tailwind CSS - recommended styling framework
-- Bootstrap
-- Material-UI / MUI
-- Chakra UI
-- Redux / Redux Toolkit
-- React Context API
-- Framer Motion
-- ShadCN/UI
-- D3.js or Chart.js
-
-### Backend
-
-- Node.js with Express.js - preferred JavaScript backend
-- Flask - lightweight Python backend option
-- Django - Python full-stack framework option
-- Spring Boot - Java enterprise-grade backend option
-- GraphQL - optional API query layer
-
-### Databases
-
-- MongoDB / MongoDB Atlas Free Tier - preferred for MERN and NoSQL solutions
-- PostgreSQL Free Tier - preferred for relational data
-- Supabase - PostgreSQL-based Firebase alternative
-- Redis - optional for caching or real-time updates
-
-### AI Tools and Techniques
-
-- LLMs, including Llama 3, Mistral 7B / Mixtral, Google Gemma, and Claude models
-- AI coding assistants, including GitHub Copilot, Codeium, and Codex
-- AI studios and IDEs, including Google AI Studio, Cursor IDE, and Lovable
-- Natural language processing techniques
-- Recommendation systems
-- Profile matching and engagement analytics
-- Natural language search
-
----
-
-## 🚫 Blacklisted Technologies
-
-The following are not allowed:
-
-- Low-code or no-code platforms such as Wix, Squarespace, or Bubble
-- Proprietary, non-free databases or paid database plans
-- Ruby on Rails, .NET Core, or outdated frameworks
-- Fully AI-generated project code
-- Unauthorized third-party APIs
-
----
-
-## 📣 Communication
-
-Official Hack Jam communication will occur through Discord. All participants must join the official event server and use designated channels for:
-
-- Team discussions
-- Support and help desk questions
-- Event updates
-
-All communication must remain professional, respectful, inclusive, and hackathon-focused.
-
-Participants should not share private information, server screenshots, logs, or private conversations outside the Hack Jam community without permission.
-
----
-
-## 🔐 Security, Privacy, and Release
-
-- Participant data must be handled responsibly and in accordance with privacy laws.
-- Teams must not include sensitive data or proprietary company information in their projects.
-- By submitting a project, teams agree that Hack Jam organizers may showcase the project for promotional and educational purposes.
+Illuminate turns a single sentence about where you are today into a personalized, tier-by-tier tech career roadmap — the skills to master, the courses that build them, and the real-world roles they lead to. It closes the gap between ambition and direction: users can _see_ the path from where they are to where they want to be, and check off progress as they go.
 
 
 ---
 
-## 📅 Key Dates
+## Table of Contents
 
-- **June 11, 2026** - Official Event Policies & Procedures effective date
-- **July 6, 2026** - Professional Development Training completion confirmation due
-- **July 8-13, 2026** - Discord Acceptable Use Policy event period
-- **Kickoff Day** - Team formation announced on Discord no later than kickoff day
-- **Final project deadline** - Submit by the designated Hack Jam deadline announced by organizers
-
-> Meeting invitations and final event deadlines will be provided by Hack Jam organizers.
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Project Structure](#project-structure)
+- [API Reference](#api-reference)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [AI Integration](#ai-integration)
+- [Known Limitations & Future Work](#known-limitations--future-work)
+- [Team](#team)
+- [Credits & Resources](#credits--resources)
 
 ---
 
-## 🧭 Clone This Repo
+## Features
 
-```bash
-git clone https://github.com/your-org/hackjam-team-XX.git
-cd hackjam-team-XX
+- **🧭 AI-Powered Career Pathing** — A user describes their background in one or two sentences (typed or spoken); a Mistral-backed engine infers the best-fit tech track and generates a structured **junior → middle → senior** roadmap with courses, skills, and target roles.
+- **💼 Employer Possibilities Portal** — Surfaces the distinct real-world roles a roadmap prepares you for, aggregated across every tier, so the path always ties back to concrete career outcomes.
+- **✅ Progress Tracking** — Logged-in users check off skills they've mastered. Progress persists to the database and re-hydrates on their next login, with per-tier completion percentages computed on the fly.
+- **🎤 Voice Onboarding** — The onboarding chat accepts speech input via the browser's Web Speech API, so users can simply _talk_ about their goals.
+- **🎨 Immersive UI** — A dark, futuristic interface with a perspective-grid hero, scroll-based parallax, and staggered fade-in animations that bring the roadmap to life.
+- **🔐 Authentication** — JWT-based registration and login with bcrypt-hashed passwords, so returning users come straight back to their saved roadmap.
+
+---
+
+## Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| **Frontend** | React 19, Vite 8, Tailwind CSS 4, Web Speech API |
+| **Backend** | Node.js, Express 4, JWT (`jsonwebtoken`), `bcryptjs`, `express-rate-limit`, CORS |
+| **Database** | MongoDB via Mongoose |
+| **AI** | Mistral AI (`@mistralai/mistralai`) |
+
+---
+
+## Architecture
+
+```text
+┌────────────────────┐        REST / JSON        ┌────────────────────┐
+│   React Client     │ ────────────────────────▶ │   Express API      │
+│  (Vite + Tailwind) │                           │                    │
+│                    │ ◀──────────────────────── │  /api/onboarding ──┼──▶ Mistral AI
+│  Landing → Chat →  │        JWT-authed          │  /api/auth         │
+│  Roadmap timeline  │                           │  /api/roadmap ─────┼──▶ MongoDB
+└────────────────────┘                           └────────────────────┘
+```
+
+The roadmap endpoint runs a **merge engine**: it pulls the master track configuration from MongoDB and overlays the user's saved progress, returning a single UI-ready payload with per-skill mastery flags and per-tier completion percentages.
+
+---
+
+## Project Structure
+
+```text
+Hackjam-2026-team-07/
+├── client/                     # React + Vite frontend
+│   └── src/
+│       ├── components/
+│       │   ├── auth/           # LoginModal, RegisterModal
+│       │   ├── onboarding/     # ChatWidget (with voice input)
+│       │   ├── roadmap/        # Timeline, CourseCard, EmployerPortal
+│       │   └── shared/         # LoadingSpinner
+│       ├── pages/              # LandingPage, RoadmapPage
+│       ├── services/api.js     # Central backend client (USE_MOCK toggle)
+│       └── data/               # mockRoadmap fixtures
+└── backend/                    # Express API
+    ├── server.js               # App entry, route mounts, Mongo connection
+    ├── routes/                 # auth, onboarding, roadmap
+    ├── models/                 # User, Track (Mongoose schemas)
+    ├── middleware/             # requireAuth (JWT verification)
+    └── utils/, prompts/        # AI prompt templates & helpers
 ```
 
 ---
 
-## 🚀 Getting Started
+## API Reference
 
-Add your team's setup instructions here as your project develops.
+Base URL: `http://localhost:5000`
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/onboarding` | — | Sends the user's free-text goal to the AI and returns a generated roadmap. |
+| `POST` | `/api/auth/register` | — | Creates an account (bcrypt-hashed password) and attaches the guest roadmap. Returns a JWT. |
+| `POST` | `/api/auth/login` | — | Authenticates an existing user and returns a JWT + `userId`. |
+| `GET` | `/api/roadmap/:userId` | ✅ Bearer | Merge engine: returns the user's full roadmap (track summary, `junior`/`middle`/`senior` tiers, mastery flags). |
+| `PATCH` | `/api/roadmap/toggle-skill` | ✅ Bearer | Toggles a single skill's mastered state and re-scores tier progress. |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- A running MongoDB instance (local or Atlas free tier)
+- A Mistral AI API key
+
+### 1. Clone
 
 ```bash
-# Example
+git clone <repo-url>
+cd Hackjam-2026-team-07
+```
+
+### 2. Backend
+
+```bash
+cd backend
 npm install
-npm run dev
+cp .env.example .env      # then fill in the values (see below)
+npm run dev               # starts on http://localhost:5000 (nodemon)
 ```
 
+### 3. Frontend
+
+```bash
+cd client
+npm install
+npm run dev               # starts on http://localhost:5173
+```
+
+> The frontend's data source is controlled by the `USE_MOCK` flag in `client/src/services/api.js`. Set it to `true` to run the UI against local mock data with no backend required, or `false` to hit the live API.
+
 ---
 
-## 📌 Project Description
+## Environment Variables
 
-Add a brief description of your team's Tech Futures solution here.
+Create `backend/.env` with the following:
 
-Suggested format:
+| Variable | Description |
+|---|---|
+| `PORT` | Backend port (default `5000`) |
+| `MONGO_URI` | MongoDB connection string |
+| `JWT_SECRET` | Secret used to sign auth tokens |
+| `MISTRAL_API_KEY` | Mistral AI API key |
+| `FRONTEND_URL` | Allowed origin for CORS (e.g. `http://localhost:5173`) |
 
-> Our project is a futuristic career pathing application that helps Per Scholas alumni, learners, and aspiring candidates visualize their tech career future, generate personalized AI-powered roadmaps, track milestones, and discover aligned employers, mentors, and opportunities.
+> ⚠️ **Never commit `.env` or share these values.** Keep `.env` in `.gitignore` and rotate any secret that has been exposed.
 
 ---
 
-## 📄 License and Resource Credits
+## AI Integration
 
-Add licensing information and credits for any open-source tools, APIs, design assets, datasets, or AI tools used in the project.
+**Runtime AI — Mistral AI.** Illuminate uses Mistral AI as its career pathing engine. When a user describes their background, the onboarding service prompts the model to infer a suitable tech track and produce a structured roadmap, including a match rationale, recommended soft skills, and growth areas. The AI's guidance renders as a summary above the interactive roadmap; all progress tracking and course data are handled deterministically by the backend, so the model _augments_ rather than replaces core functionality.
+
+**Development AI — Claude Code.** The team used [Claude Code](https://claude.com/claude-code) (Anthropic) as an AI pair-programming assistant during development. In line with Hack Jam rules, AI assisted with the build while the team authored and reviewed the majority of the code.
+
+---
+
+## Known Limitations & Future Work
+
+- **Track selection is always AI-generated.** Every signup flows through the AI chat; there is no "pick your known track" path yet. A guided track-selection flow for verified learners/alumni is a natural next step.
+- **Persona is not verified.** New accounts register as aspiring candidates; distinguishing verified Per Scholas learners/alumni (e.g. via enrollment data) is intentionally out of scope for the MVP.
+- **Self-reported progress.** Users check off their own completed skills rather than syncing from an authoritative record.
+- **Future ideas:** mentor matching, an expanded employer/opportunities portal, and adaptive roadmap updates as progress changes.
+
+---
+
+## Team
+
+**PathPair** — CGI Hack Jam 2026
+
+| Name | Role |
+|---|---|
+| Quashean Armstrong | Frontend |
+| Elvira Khuzina | Backend |
+| Troy Davis | Mentor |
+
+---
+
+## Credits & Resources
+
+- [React](https://react.dev/) · [Vite](https://vite.dev/) · [Tailwind CSS](https://tailwindcss.com/)
+- [Express](https://expressjs.com/) · [Mongoose](https://mongoosejs.com/) · [MongoDB](https://www.mongodb.com/)
+- [Mistral AI](https://mistral.ai/) — runtime career-pathing engine
+- [Claude Code](https://claude.com/claude-code) (Anthropic) — AI coding assistant used during development
+- [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken) · [`bcryptjs`](https://github.com/dcodeIO/bcrypt.js) · [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
+
+Built for CGI Hack Jam 2026 — _Tech Futures: Illuminate Your Path._
