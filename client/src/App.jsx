@@ -6,10 +6,10 @@ import RegisterModal from './components/auth/RegisterModal';
 import LoginModal from './components/auth/LoginModal';
 import { toggleSkill } from './services/api';
 
-// Immutably flips isMastered for one skill. We match by courseId FIRST, then
-// by skill name inside that course — because the same skill name can repeat
-// across different courses, so name alone isn't unique. Returns a brand-new
-// roadmap object (never mutates the original) so React detects the change.
+// Immutably flips isMastered for one skill. Matches by courseId first, then by
+// skill name within that course, because skill names can repeat across courses
+// so the name alone isn't unique. Returns a new roadmap object (never mutates
+// the original) so React detects the change and re-renders.
 function toggleSkillInRoadmap(roadmap, courseId, skillName) {
   const updated = structuredClone(roadmap);
   ["junior", "middle", "senior"].forEach((level) => {
@@ -40,10 +40,10 @@ function App() {
     setScreen('chat');
   }
 
-  // Called by LoginModal once loginUser + getRoadmap succeed. A returning
-  // learner already has a saved roadmap, so we drop them straight onto the
-  // roadmap screen in the "saved" state — skipping the guest chat and the
-  // "Save my plan" prompt they don't need.
+  // Runs after LoginModal completes loginUser + getRoadmap. A returning learner
+  // already has a saved roadmap, so this stores it, marks it saved, and jumps
+  // straight to the roadmap screen — bypassing the guest chat and the
+  // "Save my plan" prompt, which only apply to new guest users.
   function handleLoginSuccess(fetchedRoadmap) {
     setRoadmap(fetchedRoadmap);
     setIsSaved(true);
@@ -105,7 +105,8 @@ function App() {
   if (screen === 'roadmap') {
     return (
       <div className="min-h-screen bg-[#0A0B0D] pt-10 px-4">
-        <Timeline roadmap={roadmap} onToggleSkill={handleToggleSkill} />
+        {/* persona drives Timeline's contextual banners; default to aspiring_candidate */}
+        <Timeline roadmap={roadmap} onToggleSkill={handleToggleSkill} persona={roadmap?.persona || "aspiring_candidate"} />
 
         {!isSaved ? (
           <div className="max-w-xl mx-auto mt-4">
