@@ -16,12 +16,17 @@ function CourseCard({ level, data, onToggleSkill, delayIndex = 0 }) {
   const progressPercent = data.progress_percent ?? computedPercent;
 
   return (
-    // Outer wrapper owns the fade-in only. The dim (opacity-60) lives on the
-    // inner card box so the two never fight: nested opacities multiply, so a
-    // locked card ends at 1 (wrapper) × 0.6 (inner) = 0.6, exactly as before.
+    // Outer wrapper owns the fade-in only; the locked dim lives on the inner
+    // card box so the two never fight (nested opacities multiply).
     <div className="animate-fade-in mb-3" style={{ animationDelay: `${0.3 + delayIndex * 0.15}s` }}>
+    {/* Contrast fix: locked cards were opacity-60, which compounded with the
+        already-muted text colors (#6B6660) on the near-black bg and made course
+        names, checkboxes, and "Leads to:" lines almost unreadable. Bumped to
+        opacity-90 so text stays legible; the locked state is still clearly
+        de-emphasized via its cooler/darker bg, neutral border, and "· locked"
+        label (and the absence of the active "% complete" line). */}
     <div className={`rounded-lg border p-4 transition ${
-      isActive ? "border-[#C9915A]/30 bg-[#1A1610]" : "border-white/10 bg-[#0F1012] opacity-60"
+      isActive ? "border-[#C9915A]/30 bg-[#1A1610]" : "border-white/10 bg-[#0F1012] opacity-90"
     }`}>
       <h3 className="font-medium mb-1 text-[#F0EAE2]">
         {data.label || level} {isActive ? "· active" : "· locked"}
