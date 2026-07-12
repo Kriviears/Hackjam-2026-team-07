@@ -94,15 +94,15 @@ function LandingPage({ onStart, onLogin }) {
             A few words about where you're starting. We'll help chart the rest.
           </p>
 
-          <div className="flex gap-3 items-center w-full max-w-md">
+          <div className="flex flex-col gap-3 w-full max-w-sm">
             <input
               type="text"
               placeholder="I want to work in cybersecurity, but I'm not sure where to start..."
-              className="flex-1 bg-white/5 border border-white/15 rounded-lg px-4 py-3 text-sm text-white placeholder-[#8A8378]"
+              className="w-full bg-white/5 border border-white/15 rounded-lg px-4 py-3 text-sm text-white placeholder-[#8A8378]"
             />
             <button
               onClick={onStart}
-              className="bg-[#C9915A] text-[#150E06] font-medium px-5 py-3 rounded-lg text-sm whitespace-nowrap"
+              className="w-full bg-[#C9915A] text-[#150E06] font-medium px-5 py-3 rounded-lg text-sm"
             >
               Chart my path
             </button>
