@@ -35,9 +35,9 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
       <div className="bg-[#141518] border border-white/10 rounded-xl p-6 w-full max-w-sm">
-        <div className="flex justify-between items-center mb-4">
+        <div className="relative flex items-center justify-center mb-4">
           <h2 className="text-lg font-medium text-[#F0EAE2]">Save my plan</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white text-sm">✕</button>
+          <button onClick={onClose} className="absolute right-0 text-gray-400 hover:text-white text-sm">✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
