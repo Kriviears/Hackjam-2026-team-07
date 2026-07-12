@@ -100,7 +100,9 @@ router.get('/:userId', requireAuth, async (req, res) => {
     // 3. UI LAYOUT STATE CONTROL: Unlock tiers solely from completed course progress.
     const juniorStatus = junior.isCompleted ? 'completed' : 'active';
     const middleStatus = middle.isCompleted ? 'completed' : (junior.isCompleted ? 'active' : 'locked');
-    const seniorStatus = middle.isCompleted ? 'active' : 'locked';
+    const seniorStatus = senior.isCompleted
+      ? 'completed'
+      : middle.isCompleted ? 'active' : 'locked';
 
     const structuralTimelinePayload = {
       junior: {
@@ -112,11 +114,13 @@ router.get('/:userId', requireAuth, async (req, res) => {
       middle: {
         status: middleStatus,
         label: trackConfig.timeline.middle.label,
+        progress_percent: middle.percent,
         courses: middle.courses
       },
       senior: {
         status: seniorStatus,
         label: trackConfig.timeline.senior.label,
+        progress_percent: senior.percent,
         courses: senior.courses
       }
     };
