@@ -32,6 +32,10 @@ function toggleSkillInRoadmap(roadmap, courseId, skillName) {
 function App() {
   const [screen, setScreen] = useState('landing'); // 'landing' | 'chat' | 'roadmap'
   const [roadmap, setRoadmap] = useState(null);
+  // JWT for authenticated calls. Initialized from localStorage on mount so a
+  // returning user with a valid token has it available in state (auto-login UI
+  // beyond this is out of scope). Kept in sync by the login/register handlers.
+  const [token, setToken] = useState(() => localStorage.getItem('illuminate_token'));
   const [isRegisterOpen, setIsRegisterOpen] = useState(false); // controls RegisterModal visibility
   const [isLoginOpen, setIsLoginOpen] = useState(false); // controls LoginModal visibility (returning learners)
   const [isSaved, setIsSaved] = useState(false); // swaps the "Save my plan" button for a confirmation message
@@ -44,8 +48,9 @@ function App() {
   // already has a saved roadmap, so this stores it, marks it saved, and jumps
   // straight to the roadmap screen — bypassing the guest chat and the
   // "Save my plan" prompt, which only apply to new guest users.
-  function handleLoginSuccess(fetchedRoadmap) {
+  function handleLoginSuccess(fetchedRoadmap, authToken) {
     setRoadmap(fetchedRoadmap);
+    setToken(authToken);
     setIsSaved(true);
     setIsLoginOpen(false);
     setScreen('roadmap');
@@ -58,7 +63,8 @@ function App() {
 
   // Called by RegisterModal once registerUser succeeds — closes the modal
   // and flips the UI into the "saved" state.
-  function handleRegisterSuccess() {
+  function handleRegisterSuccess(authToken) {
+    setToken(authToken);
     setIsRegisterOpen(false);
     setIsSaved(true);
   }
@@ -74,7 +80,7 @@ function App() {
   async function handleToggleSkill(courseId, skillName) {
     setRoadmap((prev) => toggleSkillInRoadmap(prev, courseId, skillName));
     if (roadmap?.userId) {
-      await toggleSkill(roadmap.userId, courseId, skillName);
+      await toggleSkill(roadmap.userId, courseId, skillName, token);
     }
   }
 
