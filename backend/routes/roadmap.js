@@ -42,15 +42,14 @@ const getCourseProgress = (user, course) => {
 
 const getTierProgress = (user, tier) => {
   const courses = Array.isArray(tier.courses) ? tier.courses : [];
-  const skills = courses.flatMap((course) => course.skills);
-  const completedSkills = courses.flatMap((course) => {
-    const courseProgress = getCourseProgress(user, course);
-    return courseProgress.completedSkills;
-  });
+  const courseProgresses = courses.map((course) => getCourseProgress(user, course));
+  const highestCourseProgressPercent = courseProgresses.reduce(
+    (high, courseProgress) => Math.max(high, courseProgress.coursePercent),
+    0
+  );
 
   return {
-    completedSkills,
-    percent: calculateProgressPercent(completedSkills, skills)
+    percent: highestCourseProgressPercent
   };
 };
 
@@ -104,9 +103,9 @@ router.get('/:userId', requireAuth, async (req, res) => {
       }));
     };
 
-    // 3. UI LAYOUT STATE CONTROL: Adapts card locks dynamically based on the current user persona
-    const juniorStatus = user.persona === 'alumni' || isJuniorCompleted ? 'completed' : 'active';
-    const middleStatus = isMiddleCompleted ? 'completed' : (user.persona === 'alumni' || isJuniorCompleted ? 'active' : 'locked');
+    // 3. UI LAYOUT STATE CONTROL: Unlock tiers solely from completed course progress.
+    const juniorStatus = isJuniorCompleted ? 'completed' : 'active';
+    const middleStatus = isMiddleCompleted ? 'completed' : (isJuniorCompleted ? 'active' : 'locked');
     const seniorStatus = isMiddleCompleted ? 'active' : 'locked';
 
     const structuralTimelinePayload = {
@@ -145,9 +144,9 @@ router.get('/:userId', requireAuth, async (req, res) => {
       persona: user.persona,
       track: trackInfo,
       timeline: structuralTimelinePayload,
-      mentors: [
-        { name: "Sarah Jenkins", role: `Lead Alumni Mentor - ${trackConfig.track_title}`, track: user.track.track_id }
-      ]
+      // mentors: [
+      //   { name: "Sarah Jenkins", role: `Lead Alumni Mentor - ${trackConfig.track_title}`, track: user.track.track_id }
+      // ]
     });
 
   } catch (error) {
@@ -186,7 +185,8 @@ router.patch('/toggle-skill', requireAuth, async (req, res) => {
       return res.status(404).json({ error: "Track configuration not found for this user." });
     }
 
-    const courses = Object.values(trackConfig.timeline).flatMap((tier) => tier.courses);
+    const tierEntries = Object.entries(trackConfig.timeline);
+    const courses = tierEntries.flatMap(([, tier]) => tier.courses);
     const course = courses.find((item) => item.course_id === courseId);
     if (!course) {
       return res.status(400).json({ error: "Course does not belong to this user's track." });
@@ -217,14 +217,16 @@ router.patch('/toggle-skill', requireAuth, async (req, res) => {
       : courseProgress.coursePercent > 0 ? 'active' : 'locked';
     courseProgress.completedAt = courseProgress.status === 'completed' ? new Date() : undefined;
 
-    const juniorProgress = getTierProgress(user, trackConfig.timeline.junior);
+    // Recompute progress for whichever tier this course actually belongs to (not always junior).
+    const [, ownerTier] = tierEntries.find(([, tier]) => tier.courses.some((item) => item.course_id === courseId));
+    const tierProgress = getTierProgress(user, ownerTier);
 
     await user.save();
     return res.status(200).json({
       success: true,
       courseId,
       completedSkills: courseProgress.completedSkills,
-      tierProgressPercent: juniorProgress.percent,
+      tierProgressPercent: tierProgress.percent,
       courseProgressPercent: courseProgress.coursePercent,
       courseStatus: courseProgress.status,
       isCourseCompleted: courseProgress.status === 'completed'
