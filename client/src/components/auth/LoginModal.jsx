@@ -22,10 +22,14 @@ function LoginModal({ onClose, onSuccess }) {
     setIsSubmitting(true);
     try {
       const loginResult = await loginUser(email, password);
+      // Persist the token the same way RegisterModal does, so authenticated
+      // actions (e.g. toggle-skill) can read it back later.
+      localStorage.setItem('illuminate_token', loginResult.token);
       // On success, fetch the saved roadmap with the returned token, then
-      // pass it to onSuccess so the parent can render the roadmap screen.
+      // pass it (and the token) to onSuccess so the parent can render the
+      // roadmap screen and keep the token in state.
       const roadmap = await getRoadmap(loginResult.userId, loginResult.token);
-      onSuccess(roadmap);
+      onSuccess(roadmap, loginResult.token);
     } catch (err) {
       console.error(err);
       setError('Login failed. Check your email and password.');
