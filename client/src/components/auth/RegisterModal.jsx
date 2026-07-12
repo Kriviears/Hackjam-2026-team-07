@@ -42,21 +42,33 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
+            id="register-name"
+            name="name"
             type="text"
+            autoComplete="name"
+            aria-label="Name"
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="bg-white/5 border border-white/15 rounded-lg px-4 py-2 text-sm text-white placeholder-gray-500"
           />
           <input
+            id="register-email"
+            name="email"
             type="email"
+            autoComplete="email"
+            aria-label="Email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="bg-white/5 border border-white/15 rounded-lg px-4 py-2 text-sm text-white placeholder-gray-500"
           />
           <input
+            id="register-password"
+            name="password"
             type="password"
+            autoComplete="new-password"
+            aria-label="Password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

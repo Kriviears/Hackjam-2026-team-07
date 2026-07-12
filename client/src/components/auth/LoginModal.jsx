@@ -48,14 +48,22 @@ function LoginModal({ onClose, onSuccess }) {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
+            id="login-email"
+            name="email"
             type="email"
+            autoComplete="email"
+            aria-label="Email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="bg-white/5 border border-white/15 rounded-lg px-4 py-2 text-sm text-white placeholder-gray-500"
           />
           <input
+            id="login-password"
+            name="password"
             type="password"
+            autoComplete="current-password"
+            aria-label="Password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
