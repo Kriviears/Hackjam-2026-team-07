@@ -114,9 +114,9 @@ function LandingPage({ onStart, onLogin }) {
       </div>
 
       {/* How it works section */}
-      <div id="how-it-works" className="px-10 py-24 max-w-3xl mx-auto text-center">
-        <h2 className="text-[#F0EAE2] text-2xl font-serif font-bold mb-10">How it works</h2>
-        <div className="grid sm:grid-cols-3 gap-8">
+      <div id="how-it-works" className="px-10 py-24 max-w-5xl mx-auto text-center">
+        <h2 className="text-[#F0EAE2] text-3xl font-serif font-bold mb-12">How it works</h2>
+        <div className="grid sm:grid-cols-3 gap-12 md:gap-16">
           {[
             { step: "01", title: "Tell us about yourself", desc: "A few words about your background and goals." },
             { step: "02", title: "AI builds your roadmap", desc: "A personalized path from where you are to where you're going." },
@@ -133,10 +133,10 @@ function LandingPage({ onStart, onLogin }) {
 
       {/* Tracks section */}
       <div id="tracks" className="px-10 py-24 max-w-4xl mx-auto text-center">
-        <h2 className="text-[#F0EAE2] text-2xl font-serif font-bold mb-10">Tracks</h2>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <h2 className="text-[#F0EAE2] text-3xl font-serif font-bold mb-10">Tracks</h2>
+        <div className="flex flex-wrap justify-center gap-4">
           {["Cloud", "Cybersecurity", "Data Engineering", "Software Engineering", "Systems Support"].map((track) => (
-            <div key={track} className="bg-white/5 border border-white/10 rounded-lg py-6 px-4">
+            <div key={track} className="bg-white/5 border border-white/10 rounded-lg py-6 px-4 w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.667rem)]">
               <p className="text-[#F0EAE2] text-sm font-medium">{track}</p>
             </div>
           ))}
