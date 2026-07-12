@@ -60,7 +60,19 @@ export async function getRoadmap(userId, token) {
   const res = await fetch(`${BASE_URL}/api/roadmap/${userId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  return res.json();
+
+  // Parse defensively: a non-2xx from a wrong route can return HTML, not JSON,
+  // which would otherwise throw an opaque SyntaxError here.
+  const data = await res.json().catch(() => null);
+
+  // On any error status the backend sends { error: "..." } with no timeline.
+  // Without this guard that body flows straight into Timeline and crashes at
+  // roadmap.timeline.junior. Throw instead so the caller (LoginModal) catches
+  // it and shows a proper "login failed" message rather than a white screen.
+  if (!res.ok) {
+    throw new Error(data?.error || `Failed to load roadmap (HTTP ${res.status})`);
+  }
+  return data;
 }
 
 // Marks one skill as mastered — a nice interactive touch letting users
