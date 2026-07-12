@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit');
 const { Mistral } = require('@mistralai/mistralai');
 const Track = require('../models/Track');
 const { loadSystemPrompt } = require('../utils/loadSystemPrompt');
+const PERSONAS = ['aspiring_candidate', 'learner', 'alumni'];
 
 const onboardingLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1-minute window
@@ -20,11 +21,14 @@ const mistral = new Mistral({ apiKey: process.env.MISTRAL_API_KEY });
 // @access  Public (Protected by Rate Limiter)
 router.post('/', onboardingLimiter, async (req, res) => {
   try {
-    const { userResponse } = req.body; // Expects raw text from frontend textarea
+    const { userResponse, persona } = req.body; // Expects raw text from frontend textarea
 
     // 2. INPUT VALIDATION: Basic protection against empty or oversized text floods
     if (!userResponse || typeof userResponse !== 'string') {
       return res.status(400).json({ error: "Please enter your response." });
+    }
+    if (persona !== undefined && !PERSONAS.includes(persona)) {
+      return res.status(400).json({ error: "persona must be aspiring_candidate, learner, or alumni." });
     }
     
     const textLength = userResponse.trim().length;
@@ -40,7 +44,7 @@ router.post('/', onboardingLimiter, async (req, res) => {
  //   Allowed values for track_id are exactly: "cloud" or "cybersecurity".
     // 4. MISTRAL API CALL: Requesting structured JSON chat completion
     const aiResponse = await mistral.chat.complete({
-      model: "mistral-small-latest",  
+      model: process.env.MISTRAL_MODEL || "mistral-small-latest",
       responseFormat: { type: "json_object" },  
       messages: [
         { role: "system", content: systemPrompt },
@@ -89,7 +93,7 @@ router.post('/', onboardingLimiter, async (req, res) => {
  
     const dynamicResponsePayload = {
       userId: "guest_session_" + Math.random().toString(36).substr(2, 9), // Temporary session ID
-      persona: "aspiring_candidate",
+      persona: persona || 'aspiring_candidate',
       track: trackData, 
       timeline: {
         junior: {

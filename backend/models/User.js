@@ -14,10 +14,6 @@ const CourseProgressSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
-  coursePercent: {
-    type: Number,
-    default: 0
-  },
   completedAt: Date
 }, { _id: false });
 
