@@ -5,11 +5,6 @@ const CourseProgressSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  status: {
-    type: String,
-    enum: ['locked', 'active', 'completed'],
-    default: 'locked'
-  },
   completedSkills: {
     type: [String],
     default: []

@@ -5,17 +5,17 @@ const Track = require('../models/Track');
 const requireAuth  = require('../middleware/requireAuth');
 const PROGRESS_ENABLED_PERSONAS = ['learner', 'alumni'];
 
-const calculateProgressPercent = (completedSkills, tierSkills) => {
-  if (!tierSkills.length) {
+const calculateProgressPercent = (completedSkills, courseSkills) => {
+  if (!courseSkills.length) {
     return 0;
   }
 
-  const completedCount = tierSkills.filter((skillName) => completedSkills.includes(skillName)).length;
-  return Math.round((completedCount / tierSkills.length) * 100);
+  const completedCount = courseSkills.filter((skillName) => completedSkills.includes(skillName)).length;
+  return Math.round((completedCount / courseSkills.length) * 100);
 };
 
-// completedSkills is the only source of truth read here — coursePercent/status are always
-// derived live from it and the course's current skill list, never trusted from a stored snapshot.
+// completedSkills is the only source of truth read here — coursePercent/status are always derived from it.
+//  This function is used in both the GET /roadmap/:userId and PATCH /roadmap/toggle-skill endpoints.
 const getCourseProgress = (user, course) => {
   const savedProgress = user.progress && Array.isArray(user.progress.courses)
     ? user.progress.courses.find((progress) => progress.course_id === course.course_id)
@@ -25,8 +25,7 @@ const getCourseProgress = (user, course) => {
 
   return {
     completedSkills,
-    coursePercent,
-    status: coursePercent === 100 ? 'completed' : coursePercent > 0 ? 'active' : 'locked'
+    coursePercent
   };
 };
 
@@ -44,7 +43,7 @@ const buildTierView = (user, tier, canTrackProgress) => {
   const renderedCourses = courses.map((course) => {
     const progress = canTrackProgress
       ? getCourseProgress(user, course)
-      : { completedSkills: [], coursePercent: 0, status: 'locked' };
+      : { completedSkills: [], coursePercent: 0 };
 
     return {
       ...course,
@@ -101,7 +100,9 @@ router.get('/:userId', requireAuth, async (req, res) => {
     // 3. UI LAYOUT STATE CONTROL: Unlock tiers solely from completed course progress.
     const juniorStatus = junior.isCompleted ? 'completed' : 'active';
     const middleStatus = middle.isCompleted ? 'completed' : (junior.isCompleted ? 'active' : 'locked');
-    const seniorStatus = middle.isCompleted ? 'active' : 'locked';
+    const seniorStatus = senior.isCompleted
+      ? 'completed'
+      : middle.isCompleted ? 'active' : 'locked';
 
     const structuralTimelinePayload = {
       junior: {
@@ -113,11 +114,13 @@ router.get('/:userId', requireAuth, async (req, res) => {
       middle: {
         status: middleStatus,
         label: trackConfig.timeline.middle.label,
+        progress_percent: middle.percent,
         courses: middle.courses
       },
       senior: {
         status: seniorStatus,
         label: trackConfig.timeline.senior.label,
+        progress_percent: senior.percent,
         courses: senior.courses
       }
     };
@@ -190,7 +193,7 @@ router.patch('/toggle-skill', requireAuth, async (req, res) => {
       return res.status(400).json({ error: "Skill does not belong to this course." });
     }
 
-    let courseProgress = user.progress.courses.find((progress) => progress.course_id === courseId);
+    let courseProgress = user.progress.courses.find((savedCourseProgress) => savedCourseProgress.course_id === courseId);
     if (!courseProgress) {
       user.progress.courses.push({
         course_id: courseId,
@@ -207,10 +210,10 @@ router.patch('/toggle-skill', requireAuth, async (req, res) => {
     }
 
     const courseProgressPercent = calculateProgressPercent(courseProgress.completedSkills, course.skills);
-    courseProgress.status = courseProgressPercent === 100
+    const courseStatus = courseProgressPercent === 100
       ? 'completed'
       : courseProgressPercent > 0 ? 'active' : 'locked';
-    courseProgress.completedAt = courseProgress.status === 'completed' ? new Date() : undefined;
+    courseProgress.completedAt = courseStatus === 'completed' ? new Date() : undefined;
 
     // Recompute progress for whichever tier this course actually belongs to (not always junior).
     const [, ownerTier] = tierEntries.find(([, tier]) => tier.courses.some((item) => item.course_id === courseId));
@@ -223,8 +226,8 @@ router.patch('/toggle-skill', requireAuth, async (req, res) => {
       completedSkills: courseProgress.completedSkills,
       tierProgressPercent,
       courseProgressPercent,
-      courseStatus: courseProgress.status,
-      isCourseCompleted: courseProgress.status === 'completed'
+      courseStatus,
+      isCourseCompleted: courseStatus === 'completed'
     });
 
   } catch (error) {
