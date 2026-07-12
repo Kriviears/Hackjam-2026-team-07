@@ -19,7 +19,19 @@ export async function generateRoadmap(userInput) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userResponse: userInput }),
   });
-  return res.json();
+
+  // Parse defensively: an error status can return a non-JSON body, which would
+  // otherwise throw an opaque SyntaxError here.
+  const data = await res.json().catch(() => null);
+
+  // On any error status the backend sends { error: "..." } with no timeline.
+  // Without this guard that body flows into App/Timeline as the "roadmap" and
+  // crashes at roadmap.timeline.junior. Throw instead so ChatWidget can catch
+  // it and show a message rather than white-screening.
+  if (!res.ok) {
+    throw new Error(data?.error || `Failed to build roadmap (HTTP ${res.status})`);
+  }
+  return data;
 }
 
 // Registers a new user and attaches their guest roadmap to the new account.
