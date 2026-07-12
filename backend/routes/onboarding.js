@@ -51,7 +51,7 @@ router.post('/', onboardingLimiter, async (req, res) => {
         { role: "user", content: `User Answer: "${userResponse}"` }
       ],
       temperature: 0.7,
-      maxTokens: 300
+      maxTokens: 400
     });
 
     // Parse Mistral AI output safely
@@ -69,9 +69,9 @@ router.post('/', onboardingLimiter, async (req, res) => {
     // Inject the AI personalized reason into the response track object
     const trackData =  {
         track_id: trackConfig.track_id,
-        title: trackConfig.track_title,
+        title: aiData.title || trackConfig.track_title,
         track_title: trackConfig.track_title,
-        avg_salary: aiData.avg_salary,
+        avg_salary: aiData.avg_salary || trackConfig.avg_salary,
         match_reason: aiData.match_reason,
         soft_skills: Array.isArray(aiData.soft_skills) ? aiData.soft_skills : [],
         mentor_style_match: typeof aiData.mentor_style_match === 'string' ? aiData.mentor_style_match : "",
