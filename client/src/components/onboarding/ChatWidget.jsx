@@ -14,15 +14,26 @@ function ChatWidget({ onComplete }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false); // true while the mic is actively capturing speech
+  const [error, setError] = useState(""); // shown when the backend fails (e.g. AI service down)
 
   async function handleSubmit(e) {
     e.preventDefault(); // stop the browser from doing a full page reload on submit
     if (!input.trim()) return; // ignore empty/whitespace-only submissions
 
     setIsLoading(true);
-    const roadmap = await generateRoadmap(input);
-    setIsLoading(false);
-    onComplete(roadmap); // tell App.jsx we're done so it can switch to the roadmap screen
+    setError("");
+    try {
+      // generateRoadmap throws on a non-2xx response, so a backend failure lands
+      // here instead of flowing an error object up as a broken "roadmap" (which
+      // would crash Timeline at roadmap.timeline.junior).
+      const roadmap = await generateRoadmap(input);
+      onComplete(roadmap); // tell App.jsx we're done so it can switch to the roadmap screen
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Something went wrong building your roadmap. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   // Starts a one-shot speech-to-text capture and drops the transcript into
@@ -56,12 +67,14 @@ function ChatWidget({ onComplete }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-md">
-      <label className="text-sm text-gray-300">
+      <label htmlFor="onboarding-input" className="text-sm text-gray-300">
         Tell me about your background and goals in one or two sentences.
       </label>
       {/* Textarea and mic sit side by side; the mic fills the input by voice */}
       <div className="flex gap-2">
         <textarea
+          id="onboarding-input"
+          name="userResponse"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="I watched some HTML videos and I like helping people fix things..."
@@ -79,6 +92,8 @@ function ChatWidget({ onComplete }) {
           {isListening ? "🎤 Listening..." : "🎤 Speak"}
         </button>
       </div>
+      {error && <p className="text-red-400 text-xs">{error}</p>}
+
       <button
         type="submit"
         className="bg-[#C9915A] text-[#2A1B0E] font-medium px-5 py-3 rounded-lg text-sm self-start"
