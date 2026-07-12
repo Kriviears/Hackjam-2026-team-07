@@ -1,7 +1,9 @@
 // Renders one TIER of the roadmap (junior/middle/senior). A tier can hold
 // multiple courses — e.g. Junior has both "IT Support Training" and
 // "Low Voltage Telecom Training" — each with its own skill checklist.
-function CourseCard({ level, data, onToggleSkill }) {
+// delayIndex (0-based tier position) staggers this card's fade-in after the
+// summary box and employer portal, so tiers cascade in one after another.
+function CourseCard({ level, data, onToggleSkill, delayIndex = 0 }) {
   const isActive = data.status === "active";
 
   // Combine skills across every course in this tier to compute percent
@@ -14,7 +16,11 @@ function CourseCard({ level, data, onToggleSkill }) {
   const progressPercent = data.progress_percent ?? computedPercent;
 
   return (
-    <div className={`rounded-lg border p-4 mb-3 transition ${
+    // Outer wrapper owns the fade-in only. The dim (opacity-60) lives on the
+    // inner card box so the two never fight: nested opacities multiply, so a
+    // locked card ends at 1 (wrapper) × 0.6 (inner) = 0.6, exactly as before.
+    <div className="animate-fade-in mb-3" style={{ animationDelay: `${0.3 + delayIndex * 0.15}s` }}>
+    <div className={`rounded-lg border p-4 transition ${
       isActive ? "border-[#C9915A]/30 bg-[#1A1610]" : "border-white/10 bg-[#0F1012] opacity-60"
     }`}>
       <h3 className="font-medium mb-1 text-[#F0EAE2]">
@@ -59,6 +65,7 @@ function CourseCard({ level, data, onToggleSkill }) {
           </div>
         );
       })}
+    </div>
     </div>
   );
 }

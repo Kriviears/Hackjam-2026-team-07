@@ -1,8 +1,8 @@
-// Modal that lets a guest turn their generated roadmap into a saved account.
-// Appears over the roadmap screen when they click "Save my plan".
 import { useState } from 'react';
 import { registerUser } from '../../services/api';
 
+// Collects name/email/password and registers the user, attaching the
+// generated roadmapData to the new account.
 function RegisterModal({ roadmapData, onClose, onSuccess }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -22,12 +22,10 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
     setIsSubmitting(true);
     try {
       const result = await registerUser(name, email, password, roadmapData);
-      // Save the token so a future visit can fetch this saved roadmap
-      // without logging in again.
       localStorage.setItem('illuminate_token', result.token);
-      onSuccess(result.token); // tells App.jsx registration succeeded
+      onSuccess(result.token);
     } catch (err) {
-      console.error('Registration failed:', err);
+      console.error(err);
       setError('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -35,7 +33,6 @@ function RegisterModal({ roadmapData, onClose, onSuccess }) {
   }
 
   return (
-    // Dark backdrop covers the roadmap screen behind the modal
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
       <div className="bg-[#141518] border border-white/10 rounded-xl p-6 w-full max-w-sm">
         <div className="flex justify-between items-center mb-4">

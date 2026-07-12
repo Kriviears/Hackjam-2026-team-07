@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { loginUser, getRoadmap } from '../../services/api';
 
-// Lets an existing learner/alumni log in and pull up their saved roadmap,
-// instead of going through the guest chat onboarding flow.
+// Login form for returning learners/alumni. Authenticates an existing user
+// and loads their saved roadmap — an alternative entry point to the guest
+// chat onboarding flow.
 function LoginModal({ onClose, onSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,8 +22,8 @@ function LoginModal({ onClose, onSuccess }) {
     setIsSubmitting(true);
     try {
       const loginResult = await loginUser(email, password);
-      // After logging in, immediately fetch their saved roadmap using
-      // the token we just got back — this is what fills the screen next.
+      // On success, fetch the saved roadmap with the returned token, then
+      // pass it to onSuccess so the parent can render the roadmap screen.
       const roadmap = await getRoadmap(loginResult.userId, loginResult.token);
       onSuccess(roadmap);
     } catch (err) {
