@@ -112,7 +112,7 @@ Base URL: `http://localhost:5000`
 ### 1. Clone
 
 ```bash
-git clone <repo-url>
+git clone <https://github.com/Kriviears/Hackjam-2026-team-07.git>
 cd Hackjam-2026-team-07
 ```
 
