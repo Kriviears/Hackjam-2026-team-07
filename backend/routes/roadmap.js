@@ -140,6 +140,7 @@ router.get('/:userId', requireAuth, async (req, res) => {
 
     return res.status(200).json({
       userId: user._id,
+      name: user.name,
       persona: user.persona,
       track: trackInfo,
       timeline: structuralTimelinePayload,

@@ -30,6 +30,12 @@ function Timeline({ roadmap, onToggleSkill, persona }) {
 
       {/* animate-fade-in + a small delay so the summary box slides in first */}
       <div className="animate-fade-in mb-6 p-4 rounded-lg bg-[#1A1610] border border-[#C9915A]/20" style={{ animationDelay: '0.1s' }}>
+        {/* Greeting only for signed-in users — guests have no name on the roadmap. */}
+        {roadmap.name && (
+          <p className="text-[#C9915A] text-xs font-medium mb-1 uppercase tracking-wide">
+            Welcome back, {roadmap.name.split(" ")[0]}
+          </p>
+        )}
         <h2 className="font-medium text-lg mb-1 text-[#F0EAE2]">{roadmap.track.title}</h2>
         <p className="text-[#ADA79E] text-sm mb-2">{roadmap.track.match_reason}</p>
 
