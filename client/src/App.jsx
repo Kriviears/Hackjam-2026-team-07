@@ -84,6 +84,17 @@ function App() {
     }
   }
 
+  // Clears the persisted token and resets all session state back to the
+  // landing screen. The token is the only thing kept in localStorage, so
+  // removing it fully logs the user out.
+  function handleLogout() {
+    localStorage.removeItem('illuminate_token');
+    setToken(null);
+    setRoadmap(null);
+    setIsSaved(false);
+    setScreen('landing');
+  }
+
   if (screen === 'landing') {
     return (
       <>
@@ -111,6 +122,19 @@ function App() {
   if (screen === 'roadmap') {
     return (
       <div className="min-h-screen bg-[#0A0B0D] pt-10 px-4">
+        {/* Log out only shows once a user is actually authenticated (token set) —
+            a guest browsing their unsaved roadmap has nothing to log out of. */}
+        {token && (
+          <div className="max-w-xl mx-auto flex justify-end mb-2">
+            <button
+              onClick={handleLogout}
+              className="text-xs text-[#8A8378] hover:text-[#ADA79E] underline"
+            >
+              Log out
+            </button>
+          </div>
+        )}
+
         {/* persona drives Timeline's contextual banners; default to aspiring_candidate */}
         <Timeline roadmap={roadmap} onToggleSkill={handleToggleSkill} persona={roadmap?.persona || "aspiring_candidate"} />
 
