@@ -17,6 +17,10 @@ export const mockRoadmap = {
     mentor_style_match: "A practical mentor with strong technical troubleshooting experience.",
     growth_areas: ["Time management under pressure", "Structured troubleshooting"]
   },
+  mentors: [
+    { name: "Sarah Jenkins", role: "Lead Cloud Engineer @ AWS", expertise: "EC2, IAM, and cost optimization for early-career support engineers." },
+    { name: "Marcus Reed", role: "DevOps Manager @ Rackspace", expertise: "CI/CD pipelines and moving from helpdesk into infrastructure roles." }
+  ],
   timeline: {
     junior: {
       status: "active",

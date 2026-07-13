@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit');
 const { Mistral } = require('@mistralai/mistralai');
 const Track = require('../models/Track');
 const { loadSystemPrompt } = require('../utils/loadSystemPrompt');
+const { getMentorsForTrack } = require('../data/mentors');
 const PERSONAS = ['aspiring_candidate', 'learner', 'alumni'];
 
 const onboardingLimiter = rateLimit({
@@ -94,7 +95,8 @@ router.post('/', onboardingLimiter, async (req, res) => {
     const dynamicResponsePayload = {
       userId: "guest_session_" + Math.random().toString(36).substr(2, 9), // Temporary session ID
       persona: persona || 'aspiring_candidate',
-      track: trackData, 
+      track: trackData,
+      mentors: getMentorsForTrack(selectedTrackId),
       timeline: {
         junior: {
           status: "active",

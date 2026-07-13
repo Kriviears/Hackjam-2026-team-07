@@ -1,5 +1,6 @@
 import CourseCard from './CourseCard';
 import EmployerPortal from './EmployerPortal';
+import MentorPanel from './MentorPanel';
 
 // No longer calls the API directly — onToggleSkill is passed down from
 // App.jsx, which owns the roadmap state and can actually trigger a re-render.
@@ -53,10 +54,15 @@ function Timeline({ roadmap, onToggleSkill, persona }) {
         )}
       </div>
 
+      {/* Track-matched mentors from the backend. Sits between the summary and
+          the employer portal, joining the same staggered fade. Renders nothing
+          if the roadmap carries no mentors. */}
+      <MentorPanel roadmap={roadmap} className="animate-fade-in" style={{ animationDelay: '0.2s' }} />
+
       {/* Career opportunities derived from course target_roles.
           className/style are forwarded onto EmployerPortal's own wrapper so it
-          joins the staggered fade, animating in just after the summary box. */}
-      <EmployerPortal roadmap={roadmap} className="animate-fade-in" style={{ animationDelay: '0.2s' }} />
+          joins the staggered fade, animating in just after the mentors panel. */}
+      <EmployerPortal roadmap={roadmap} className="animate-fade-in" style={{ animationDelay: '0.25s' }} />
 
       {/* delayIndex (0,1,2) staggers junior→middle→senior after the portal */}
       {["junior", "middle", "senior"].map((level, index) => (

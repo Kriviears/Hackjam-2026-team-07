@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const Track = require('../models/Track');
 const requireAuth  = require('../middleware/requireAuth');
+const { getMentorsForTrack } = require('../data/mentors');
 const PROGRESS_ENABLED_PERSONAS = ['learner', 'alumni'];
 
 const calculateProgressPercent = (completedSkills, courseSkills) => {
@@ -142,9 +143,7 @@ router.get('/:userId', requireAuth, async (req, res) => {
       persona: user.persona,
       track: trackInfo,
       timeline: structuralTimelinePayload,
-      // mentors: [
-      //   { name: "Sarah Jenkins", role: `Lead Alumni Mentor - ${trackConfig.track_title}`, track: user.track.track_id }
-      // ]
+      mentors: getMentorsForTrack(user.track.track_id)
     });
 
   } catch (error) {

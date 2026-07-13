@@ -4,7 +4,12 @@
 // delayIndex (0-based tier position) staggers this card's fade-in after the
 // summary box and employer portal, so tiers cascade in one after another.
 function CourseCard({ level, data, onToggleSkill, delayIndex = 0 }) {
+  // Tier status from the backend: 'active' | 'locked' | 'completed'. A tier
+  // reads 'completed' once one of its courses reaches 100% (GET /api/roadmap).
+  const isCompleted = data.status === "completed";
   const isActive = data.status === "active";
+  // Completed and active tiers are both "unlocked": full styling + progress line.
+  const isUnlocked = isActive || isCompleted;
 
   // Combine skills across every course in this tier to compute percent
   // complete, in case the backend hasn't sent one directly yet.
@@ -26,13 +31,17 @@ function CourseCard({ level, data, onToggleSkill, delayIndex = 0 }) {
         de-emphasized via its cooler/darker bg, neutral border, and "· locked"
         label (and the absence of the active "% complete" line). */}
     <div className={`rounded-lg border p-4 transition ${
-      isActive ? "border-[#C9915A]/30 bg-[#1A1610]" : "border-white/10 bg-[#0F1012] opacity-90"
+      isCompleted
+        ? "border-[#7FBF9E]/30 bg-[#12180F]"
+        : isActive
+        ? "border-[#C9915A]/30 bg-[#1A1610]"
+        : "border-white/10 bg-[#0F1012] opacity-90"
     }`}>
       <h3 className="font-medium mb-1 text-[#F0EAE2]">
-        {data.label || level} {isActive ? "· active" : "· locked"}
+        {data.label || level} {isCompleted ? "· completed" : isActive ? "· active" : "· locked"}
       </h3>
 
-      {isActive && (
+      {isUnlocked && (
         <p className="text-[#ADA79E] mb-3 text-sm">{progressPercent}% complete</p>
       )}
 
